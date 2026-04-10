@@ -2,3 +2,8 @@ spring:
   application:
     name:
       scraper
+
+apify:
+  actor-id:
+    comment:
+      SbK00X0JYCPblD2wp
