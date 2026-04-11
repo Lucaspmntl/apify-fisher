@@ -54,6 +54,7 @@ public class CommentsScraperGateway {
 
         do{
             try {
+                System.out.println("Polling run in thread: " + Thread.currentThread().getName());
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -61,7 +62,7 @@ public class CommentsScraperGateway {
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
-            // TODO: Tratar excessões como: FAILED ou TIMED-OUT
+            // TODO: Tratar excessões como FAILED ou TIMED-OUT
             // Verificar as possibilidades em: https://docs.apify.com/api/v2/actor-run-get
 
         } while(!status.equalsIgnoreCase("SUCCEEDED"));
