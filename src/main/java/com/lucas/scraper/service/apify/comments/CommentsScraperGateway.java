@@ -1,18 +1,47 @@
 package com.lucas.scraper.service.apify.comments;
 
 import com.lucas.scraper.dto.request.ApifyCommentsRequestDTO;
+import com.lucas.scraper.dto.response.ApifyCommentsResponseDTO;
+import com.lucas.scraper.dto.response.startRun.ApifyRunResponse;
+import com.lucas.scraper.service.apify.ApifyGenericFeign;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class CommentsScraperGateway {
 
-    private CommentScraperFeign commentScraperFeign;
+    @Value("${apify.actor-id.comment}")
+    String actorId;
 
-    public CommentsScraperGateway(CommentScraperFeign commentScraperFeign) {
-        this.commentScraperFeign = commentScraperFeign;
+    @Value("${apify.token}")
+    String token;
+
+    private ApifyGenericFeign apifyClient;
+
+    public CommentsScraperGateway(ApifyGenericFeign apifyClient) {
+        this.apifyClient = apifyClient;
     }
 
-    public ApifyCommentsRequestDTO getComments(ApifyCommentsRequestDTO dto) {
-        return null;
+    public List<ApifyCommentsResponseDTO> getComments(ApifyCommentsRequestDTO input) {
+        ApifyRunResponse run = apifyClient.startRun(actorId, input, "Bearer " + token);
+
+        List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
+
+        // Transforma os dados brutos em um objeto ApifyCommentsResponseDTO
+        return rawComments.stream().map(item -> new ApifyCommentsResponseDTO(
+                (String) item.get("id"),
+                (String) item.get("text"),
+                (String) item.get("ownerUsername"),
+                (String) item.get("ownerProfilePicUrl"),
+                (String) item.get("timestamp"),
+                (Integer) item.get("likesCount"),
+                (Integer) item.get("repliesCount")
+
+                //(List<repliesDTO>) item.get("replies")
+        )).toList();
+
     }
 }
