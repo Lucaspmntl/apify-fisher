@@ -11,7 +11,7 @@ import java.util.Map;
 public interface ApifyGenericFeign {
 
     // Verificar possibilidade de ser /run ao invés de /runs
-    @PostMapping(value = "/acts/{actorId}/runs?waitForFinish=8", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/acts/{actorId}/runs?waitForFinish=5", consumes = "application/json", produces = "application/json")
     public ApifyRunResponse startRun(
             @PathVariable String actorId,
             @RequestBody Object input,
