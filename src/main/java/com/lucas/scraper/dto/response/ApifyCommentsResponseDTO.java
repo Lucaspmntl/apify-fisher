@@ -12,6 +12,6 @@ public record ApifyCommentsResponseDTO(
         Integer likesCount,
         Integer repliesCount
 
-        //List<Object> replies
+        //List<Map<String, Object>> replies
 ) {
 }

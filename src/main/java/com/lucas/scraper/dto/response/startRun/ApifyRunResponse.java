@@ -1,9 +1,9 @@
-package com.lucas.scraper.dto.startRun;
+package com.lucas.scraper.dto.response.startRun;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record startRunDTO(
+public record ApifyRunResponse(
         Data data
 ) {
 }
