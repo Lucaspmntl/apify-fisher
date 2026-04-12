@@ -1,9 +1,15 @@
 spring:
+
   application:
     name:
       scraper
+
+  profiles:
+    active: prod
 
 apify:
   actor-id:
     comment:
       SbK00X0JYCPblD2wp
+
+

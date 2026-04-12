@@ -19,13 +19,15 @@ public class CommentsScraperGateway {
     @Value("${apify.token}")
     String token;
 
-    private ApifyGenericFeign apifyClient;
+    private final ApifyGenericFeign apifyClient;
 
     public CommentsScraperGateway(ApifyGenericFeign apifyClient) {
         this.apifyClient = apifyClient;
     }
 
     public List<ApifyCommentsResponseDTO> getComments(ApifyCommentsRequestDTO input) {
+
+        System.out.println(input.toString());
         ApifyRunResponse run = apifyClient.startRun(actorId, input, "Bearer " + token);
 
         if (!polling(run.data().runId()))

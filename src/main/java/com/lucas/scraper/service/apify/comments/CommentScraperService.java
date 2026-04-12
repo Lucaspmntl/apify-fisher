@@ -28,8 +28,9 @@ public class CommentScraperService {
 
         return raw
                 .stream()
-                .filter(item -> item.text().contains(stringFilter))
+                .filter(item -> item.text()
+                        .toLowerCase()
+                        .contains(stringFilter.toLowerCase()))
                 .toList();
     }
-
 }
