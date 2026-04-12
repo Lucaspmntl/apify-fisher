@@ -25,7 +25,7 @@ public interface ApifyGenericFeign {
     );
 
 
-    @GetMapping(value = "/actor-runs/{runId}/dataset", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/actor-runs/{runId}/dataset/items", consumes = "application/json", produces = "application/json")
     public List<Map<String, Object>> getDatasetItems(
             @PathVariable String runId,
             @RequestHeader("Authorization") String token
