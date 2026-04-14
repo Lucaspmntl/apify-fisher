@@ -1,7 +1,7 @@
 package com.lucas.scraper.controller;
 
-import com.lucas.scraper.dto.request.ApifyFilterCommentsRequestDTO;
-import com.lucas.scraper.dto.response.ApifyCommentsResponseDTO;
+import com.lucas.scraper.dto.in.IgKeywordIn;
+import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.service.apify.comments.CommentScraperService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +19,9 @@ public class    ApifyController {
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<List<ApifyCommentsResponseDTO>> getFilteredComments(@RequestBody ApifyFilterCommentsRequestDTO request){
-        List<ApifyCommentsResponseDTO> response = commentsService
-                .getFilteredComments(request.apifyInput(), request.stringFilter());
+    public ResponseEntity<List<IgCommentsOut>> getFilteredComments(@RequestBody IgKeywordIn request){
+        List<IgCommentsOut> response = commentsService
+                .getFilteredComments(request.apifyInput(), request.keyword());
 
         return ResponseEntity.ok(response);
     }

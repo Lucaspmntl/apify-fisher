@@ -1,36 +1,33 @@
 package com.lucas.scraper.service.apify.comments;
 
-import com.lucas.scraper.dto.request.ApifyCommentsRequestDTO;
-import com.lucas.scraper.dto.response.ApifyCommentsResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.lucas.scraper.dto.in.IgCommentsInput;
+import com.lucas.scraper.dto.out.IgCommentsOut;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentScraperService {
 
-    private CommentsScraperGateway commentsGateway;
+    private final IgCommentsGateway commentsGateway;
 
-    public CommentScraperService(CommentsScraperGateway commentsGateway) {
-        this.commentsGateway = commentsGateway;
+    public CommentScraperService(IgCommentsGateway igCommentsGateway) {
+        this.commentsGateway = igCommentsGateway;
     }
 
-    public List<ApifyCommentsResponseDTO> getComments(ApifyCommentsRequestDTO request){
-        return commentsGateway.getComments(request);
+    public List<IgCommentsOut> getComments(IgCommentsInput input){
+        return commentsGateway.getComments(input);
     }
 
-    public List<ApifyCommentsResponseDTO> getFilteredComments(ApifyCommentsRequestDTO request, String stringFilter){
+    public List<IgCommentsOut> getFilteredComments(IgCommentsInput input, String keyword){
 
-        var raw = getComments(request);
+        var raw = getComments(input);
 
         return raw
                 .stream()
                 .filter(item -> item.text()
                         .toLowerCase()
-                        .contains(stringFilter.toLowerCase()))
+                        .contains(keyword.toLowerCase()))
                 .toList();
     }
 }

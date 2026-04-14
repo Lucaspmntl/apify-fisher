@@ -1,6 +1,6 @@
 package com.lucas.scraper.service.apify;
 
-import com.lucas.scraper.dto.response.startRun.ApifyRunResponse;
+import com.lucas.scraper.dto.out.startRun.RunResponseOut;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,16 +10,15 @@ import java.util.Map;
 @FeignClient(name = "apify", url = "https://api.apify.com/v2")
 public interface ApifyGenericFeign {
 
-    // Verificar possibilidade de ser /run ao invés de /runs
     @PostMapping(value = "/acts/{actorId}/runs?waitForFinish=5", consumes = "application/json", produces = "application/json")
-    public ApifyRunResponse startRun(
+    public RunResponseOut startRun(
             @PathVariable String actorId,
             @RequestBody Object input,
             @RequestHeader("Authorization") String token);
 
 
     @GetMapping(value = "/actor-runs/{runId}", consumes = "application/json", produces = "application/json")
-    public ApifyRunResponse getRunDetails(
+    public RunResponseOut getRunDetails(
             @PathVariable String runId,
             @RequestHeader("Authorization") String token
     );

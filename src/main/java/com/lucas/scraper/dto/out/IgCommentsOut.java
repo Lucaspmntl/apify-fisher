@@ -1,9 +1,9 @@
-package com.lucas.scraper.dto.response;
+package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ApifyCommentsResponseDTO(
+public record IgCommentsOut(
         String id,
         String text,
         String ownerUsername,

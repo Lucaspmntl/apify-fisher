@@ -1,8 +1,8 @@
 package com.lucas.scraper.service.apify.comments;
 
-import com.lucas.scraper.dto.request.ApifyCommentsRequestDTO;
-import com.lucas.scraper.dto.response.ApifyCommentsResponseDTO;
-import com.lucas.scraper.dto.response.startRun.ApifyRunResponse;
+import com.lucas.scraper.dto.in.IgCommentsInput;
+import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.dto.out.startRun.RunResponseOut;
 import com.lucas.scraper.service.apify.ApifyGenericFeign;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class CommentsScraperGateway {
+public class IgCommentsGateway {
 
     @Value("${apify.actor-id.comment}")
     String actorId;
@@ -21,22 +21,22 @@ public class CommentsScraperGateway {
 
     private final ApifyGenericFeign apifyClient;
 
-    public CommentsScraperGateway(ApifyGenericFeign apifyClient) {
+    public IgCommentsGateway(ApifyGenericFeign apifyClient) {
         this.apifyClient = apifyClient;
     }
 
-    public List<ApifyCommentsResponseDTO> getComments(ApifyCommentsRequestDTO input) {
+    public List<IgCommentsOut> getComments(IgCommentsInput input) {
 
         System.out.println(input.toString());
-        ApifyRunResponse run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
 
         if (!polling(run.data().runId()))
             throw new RuntimeException("Polling failed");
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
 
-        // Transforma os dados brutos em um objeto ApifyCommentsResponseDTO
-        return rawComments.stream().map(item -> new ApifyCommentsResponseDTO(
+        // Transforma os dados brutos em um objeto IgCommentsInput
+        return rawComments.stream().map(item -> new IgCommentsOut(
                 (String) item.get("id"),
                 (String) item.get("text"),
                 (String) item.get("ownerUsername"),
