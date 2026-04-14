@@ -3,6 +3,8 @@ package com.lucas.scraper.service.apify.comments;
 import com.lucas.scraper.dto.in.FisherIn;
 import com.lucas.scraper.dto.in.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 @Service
 public class CommentScraperService {
 
+    private static final Logger log = LoggerFactory.getLogger(CommentScraperService.class);
     private final IgCommentsGateway commentsGateway;
     public CommentScraperService(IgCommentsGateway igCommentsGateway) {
         this.commentsGateway = igCommentsGateway;
@@ -21,20 +24,28 @@ public class CommentScraperService {
 
     public List<IgCommentsOut> getInstagramFilteredComments(FisherIn input, String keyword){
 
-        if (!input.instagramUrl().contains("instagram"))
+        if (!input.instagramUrl().contains("instagram")) {
+            log.warn("Comment Service: Requisição ignorada devido invalidade de URL");
             throw new RuntimeException("A URL deve conter o endereço de algum objeto do Instagram.");
+            // TODO: Tratamento de exception URL personalizada
+        }
 
-        var raw = getComments(new IgCommentsIn(
+        log.info("Comment Service: Iniciando coleta em: {}", input.instagramUrl());
+
+        List<IgCommentsOut> raw = getComments(new IgCommentsIn(
                 List.of(input.instagramUrl()),
                 false,
                 false,
                 1000));
 
-        return raw
+         List<IgCommentsOut> response = raw
                 .stream()
                 .filter(item -> item.text()
                         .toLowerCase()
                         .contains(keyword.toLowerCase()))
                 .toList();
+
+         log.info("Instagram Comment Service: Foram filtradas {} itens com a keyword \"{}\" no Instagram", response.size(), keyword);
+         return response;
     }
 }

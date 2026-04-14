@@ -4,10 +4,12 @@ import com.lucas.scraper.dto.in.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.startRun.RunResponseOut;
 import com.lucas.scraper.service.apify.ApifyGenericFeign;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -27,20 +29,19 @@ public class IgCommentsGateway {
         this.apifyClient = apifyClient;
     }
 
-
     public List<IgCommentsOut> getComments(IgCommentsIn input) {
 
-        log.info("Gateway: Iniciando a Run de id: {} \ncom input: {}", actorId, input.toString());
         RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        log.info("Gateway: Iniciando a Run de id {}", run.data().runId());
 
 
         if (!polling(run.data().runId()))
             log.error("Gateway: Polling falhou.");
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
-        log.info("Gateway: Log de id {} retornou {} itens", run.data().runId(), rawComments.size());
+        log.info("Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
-        // Transforma os dados brutos em um objeto IgCommentsInput
+        // Transforma os dados List<Map<String, Object>> em um objeto IgCommentsInput
         return rawComments.stream().map(item -> new IgCommentsOut(
                 (String) item.get("id"),
                 (String) item.get("text"),
@@ -64,13 +65,13 @@ public class IgCommentsGateway {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                log.error("Erro na tentativa [{}] de polling: {}", tryngs, e.toString());
+                log.error("Erro na tentativa {} de polling: {}", tryngs, e.toString());
                 throw new RuntimeException(e); // TODO: Tratar excessões
             }
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
-            log.debug("Gateway: Tentativa [{}] de polling, status atual: {}", tryngs, status);
+            log.debug("Gateway: Tentativa {} de polling, status atual: {}", tryngs, status);
 
             // TODO: Tratar excessões como FAILED ou TIMED-OUT
             // Verificar as possibilidades em: https://docs.apify.com/api/v2/actor-run-get
