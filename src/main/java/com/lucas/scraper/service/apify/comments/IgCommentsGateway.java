@@ -1,6 +1,6 @@
 package com.lucas.scraper.service.apify.comments;
 
-import com.lucas.scraper.dto.in.IgCommentsInput;
+import com.lucas.scraper.dto.in.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.startRun.RunResponseOut;
 import com.lucas.scraper.service.apify.ApifyGenericFeign;
@@ -20,14 +20,13 @@ public class IgCommentsGateway {
     String token;
 
     private final ApifyGenericFeign apifyClient;
-
     public IgCommentsGateway(ApifyGenericFeign apifyClient) {
         this.apifyClient = apifyClient;
     }
 
-    public List<IgCommentsOut> getComments(IgCommentsInput input) {
 
-        System.out.println(input.toString());
+    public List<IgCommentsOut> getComments(IgCommentsIn input) {
+
         RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
 
         if (!polling(run.data().runId()))

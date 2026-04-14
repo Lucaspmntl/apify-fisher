@@ -1,6 +1,6 @@
 package com.lucas.scraper.controller;
 
-import com.lucas.scraper.dto.in.IgKeywordIn;
+import com.lucas.scraper.dto.in.FisherIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.service.apify.comments.CommentScraperService;
 import jakarta.validation.Valid;
@@ -13,16 +13,16 @@ import java.util.List;
 @RequestMapping("/fisher")
 public class ApifyController {
 
-    private CommentScraperService commentsService;
-
+    private final CommentScraperService commentsService;
     public ApifyController(CommentScraperService commentsService) {
         this.commentsService = commentsService;
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<List<IgCommentsOut>> getFilteredComments(@Valid @RequestBody IgKeywordIn request){
+    public ResponseEntity<List<IgCommentsOut>> getFilteredComments(@Valid @RequestBody FisherIn request){
+
         List<IgCommentsOut> response = commentsService
-                .getFilteredComments(request.apifyInput(), request.keyword());
+                .getInstagramFilteredComments(request, request.keyword());
 
         return ResponseEntity.ok(response);
     }

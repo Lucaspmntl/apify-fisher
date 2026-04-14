@@ -1,5 +1,4 @@
 spring:
-
   application:
     name:
       fisher
@@ -11,5 +10,3 @@ apify:
   actor-id:
     comment:
       SbK00X0JYCPblD2wp
-
-
