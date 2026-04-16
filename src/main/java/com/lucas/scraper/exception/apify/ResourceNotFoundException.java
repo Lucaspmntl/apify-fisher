@@ -1,7 +1,12 @@
 package com.lucas.scraper.exception.apify;
 
-public class ResourceNotFoundException extends RuntimeException {
+import com.lucas.scraper.dto.out.exception.GenericMessageOut;
+import com.lucas.scraper.exception.GenericCoreException;
+import lombok.Getter;
+
+public class ResourceNotFoundException extends GenericCoreException {
+
     public ResourceNotFoundException(String message) {
-        super(message);
+        super(message, 404);
     }
 }

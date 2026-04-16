@@ -31,10 +31,10 @@ public class GlobalFeignDecoder implements ErrorDecoder {
                     "O recurso solicitado não foi encontrado."
             );
             case 405 -> new MethodNotAllowedException(
-                    "O método HTTP utilizado não permitido para esta requisição"
+                    "O método HTTP utilizado não é permitido para esta requisição."
             );
             case 429 -> new RateLimitExceedException(
-                    "O limite de tentativas foi excedido. Tente novamente mais tarde"
+                    "O limite de tentativas foi excedido. Tente novamente mais tarde."
             );
             default -> new DefaultIntegrationException(
                     "Erro de integração não tratado."

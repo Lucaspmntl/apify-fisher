@@ -1,7 +1,9 @@
 package com.lucas.scraper.exception.apify;
 
-public class InsufficientPermissionsException extends RuntimeException {
+import com.lucas.scraper.exception.GenericCoreException;
+
+public class InsufficientPermissionsException extends GenericCoreException {
     public InsufficientPermissionsException(String message) {
-        super(message);
+        super(message, 403);
     }
 }

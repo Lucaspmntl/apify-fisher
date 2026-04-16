@@ -1,7 +1,10 @@
 package com.lucas.scraper.exception.apify;
 
-public class InvalidInputException extends RuntimeException {
+import com.lucas.scraper.exception.GenericCoreException;
+
+public class InvalidInputException extends GenericCoreException {
+
     public InvalidInputException(String message) {
-        super(message);
+        super(message, 400);
     }
 }

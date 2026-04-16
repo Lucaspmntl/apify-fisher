@@ -1,7 +1,10 @@
 package com.lucas.scraper.exception.apify;
 
-public class MethodNotAllowedException extends RuntimeException {
+import com.lucas.scraper.exception.GenericCoreException;
+
+public class MethodNotAllowedException extends GenericCoreException {
+
     public MethodNotAllowedException(String message) {
-        super(message);
+        super(message, 405);
     }
 }

@@ -42,8 +42,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidURLException.class)
     private ResponseEntity<GenericMessageOut> InvalidUrlExceptionHandler(InvalidURLException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericMessageOut(
-                exception.getMessage(),
-                400));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getDetails());
     }
 }

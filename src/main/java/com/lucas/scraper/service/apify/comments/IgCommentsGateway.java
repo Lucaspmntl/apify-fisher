@@ -72,7 +72,10 @@ public class IgCommentsGateway {
                 watch.stop();
 
                 log.error("Erro na tentativa {} de polling: {}", attempts, e.toString());
-                throw new PollingFailedException("Erro interno na tentativa de polling."); // TODO: Tratar excessões
+                throw new PollingFailedException("Erro interno na tentativa de polling.",
+                        500,
+                        watch.getTotalTimeSeconds(),
+                        attempts);
             }
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();

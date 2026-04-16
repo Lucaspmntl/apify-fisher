@@ -5,11 +5,11 @@ import java.time.OffsetDateTime;
 public record PollingFailedOut (
     String message,
     int statusCode,
-    String attemptsTime,
+    double timeSpentSeconds,
     int attempts,
     String timestamp
 ) {
-    public PollingFailedOut(String message, int statusCode, String attemptsTime, int attempts) {
-        this(message, statusCode, attemptsTime, attempts, OffsetDateTime.now().toString());
+    public PollingFailedOut(String message, int statusCode, double timeSpent, int attempts) {
+        this(message, statusCode, timeSpent, attempts, OffsetDateTime.now().toString());
     }
 }

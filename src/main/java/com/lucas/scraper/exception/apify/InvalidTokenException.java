@@ -1,7 +1,9 @@
 package com.lucas.scraper.exception.apify;
 
-public class InvalidTokenException extends RuntimeException {
+import com.lucas.scraper.exception.GenericCoreException;
+
+public class InvalidTokenException extends GenericCoreException {
     public InvalidTokenException(String message) {
-        super(message);
+        super(message, 401);
     }
 }

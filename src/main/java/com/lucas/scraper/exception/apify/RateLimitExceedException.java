@@ -1,7 +1,12 @@
 package com.lucas.scraper.exception.apify;
 
-public class RateLimitExceedException extends RuntimeException {
+import com.lucas.scraper.dto.out.exception.GenericMessageOut;
+import com.lucas.scraper.exception.GenericCoreException;
+import lombok.Getter;
+
+public class RateLimitExceedException extends GenericCoreException {
+
     public RateLimitExceedException(String message) {
-        super(message);
+        super(message, 429);
     }
 }
