@@ -2,6 +2,8 @@ package com.lucas.scraper.handler;
 
 import com.lucas.scraper.dto.out.exception.BeansValidationOut;
 import com.lucas.scraper.dto.out.exception.FieldExceptionOut;
+import com.lucas.scraper.dto.out.exception.GenericMessageOut;
+import com.lucas.scraper.exception.InvalidURLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -36,5 +38,12 @@ public class GlobalExceptionHandler {
                         fieldExceptionOut);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(InvalidURLException.class)
+    private ResponseEntity<GenericMessageOut> InvalidUrlExceptionHandler(InvalidURLException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericMessageOut(
+                exception.getMessage(),
+                400));
     }
 }

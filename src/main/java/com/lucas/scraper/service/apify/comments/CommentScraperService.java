@@ -3,6 +3,8 @@ package com.lucas.scraper.service.apify.comments;
 import com.lucas.scraper.dto.in.FisherIn;
 import com.lucas.scraper.dto.in.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.dto.out.exception.GenericMessageOut;
+import com.lucas.scraper.exception.InvalidURLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,7 @@ public class CommentScraperService {
 
         if (!input.instagramUrl().contains("instagram")) {
             log.warn("Comment Service: Requisição ignorada devido invalidade de URL");
-            throw new RuntimeException("A URL deve conter o endereço de algum objeto do Instagram.");
-            // TODO: Tratamento de exception URL personalizada
+            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
         }
 
         log.info("Comment Service: Iniciando coleta em: {}", input.instagramUrl());

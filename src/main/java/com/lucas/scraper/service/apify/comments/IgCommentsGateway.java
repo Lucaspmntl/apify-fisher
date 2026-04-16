@@ -3,12 +3,14 @@ package com.lucas.scraper.service.apify.comments;
 import com.lucas.scraper.dto.in.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.startRun.RunResponseOut;
+import com.lucas.scraper.exception.PollingFailedException;
 import com.lucas.scraper.service.apify.ApifyGenericFeign;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -60,23 +62,27 @@ public class IgCommentsGateway {
         log.debug("Gateway: Iniciando polling para requisição de id: {}", runId);
 
         String status;
-        int tryngs = 1;
+        int attempts = 1;
+        StopWatch watch = new StopWatch();
+        watch.start();
         do{
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                log.error("Erro na tentativa {} de polling: {}", tryngs, e.toString());
-                throw new RuntimeException(e); // TODO: Tratar excessões
+                watch.stop();
+
+                log.error("Erro na tentativa {} de polling: {}", attempts, e.toString());
+                throw new PollingFailedException("Erro interno na tentativa de polling."); // TODO: Tratar excessões
             }
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
-            log.debug("Gateway: Tentativa {} de polling, status atual: {}", tryngs, status);
+            log.debug("Gateway: Tentativa {} de polling, status atual: {}", attempts, status);
 
             // TODO: Tratar excessões como FAILED ou TIMED-OUT
             // Verificar as possibilidades em: https://docs.apify.com/api/v2/actor-run-get
 
-            tryngs++;
+            attempts++;
         } while(!status.equalsIgnoreCase("SUCCEEDED"));
 
         return true;
