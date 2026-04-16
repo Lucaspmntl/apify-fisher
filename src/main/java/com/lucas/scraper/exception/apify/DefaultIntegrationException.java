@@ -1,8 +1,10 @@
 package com.lucas.scraper.exception.apify;
 
-public class DefaultIntegrationException extends RuntimeException {
+import com.lucas.scraper.exception.GenericCoreException;
 
-    public DefaultIntegrationException(String message) {
-        super(message);
+public class DefaultIntegrationException extends GenericCoreException {
+
+    public DefaultIntegrationException(String message, int statusCode) {
+        super(message, statusCode);
     }
 }

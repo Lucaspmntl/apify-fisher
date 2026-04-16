@@ -37,7 +37,7 @@ public class GlobalFeignDecoder implements ErrorDecoder {
                     "O limite de tentativas foi excedido. Tente novamente mais tarde."
             );
             default -> new DefaultIntegrationException(
-                    "Erro de integração não tratado."
+                    "Erro de integração não tratado.", response.status()
             );
         };
     }
