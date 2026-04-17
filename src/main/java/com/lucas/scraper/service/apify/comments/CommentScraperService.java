@@ -19,6 +19,9 @@ public class CommentScraperService {
     public CommentScraperService(IgCommentsGateway igCommentsGateway) {
         this.commentsGateway = igCommentsGateway;
     }
+
+
+    // TODO: Verificar possibilidade de deixar filtros de comentários para a outra parte da aplicação
     public List<IgCommentsOut> getComments(IgCommentsIn input){
         return commentsGateway.getComments(input);
     }

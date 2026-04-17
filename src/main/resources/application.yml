@@ -12,5 +12,8 @@ apify:
       SbK00X0JYCPblD2wp
     facebook-comment:
       us5srxAYnsrkgUv2v
+    tiktok-comment:
+      BDec00yAmCm1QbMEI
+
 server:
   port: 8080
