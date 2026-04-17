@@ -19,7 +19,7 @@ import java.util.Map;
 @Component
 public class IgCommentsGateway {
 
-    @Value("${apify.actor-id.comment}")
+    @Value("${apify.actor-id.instagram-comment}")
     String actorId;
 
     @Value("${apify.token}")

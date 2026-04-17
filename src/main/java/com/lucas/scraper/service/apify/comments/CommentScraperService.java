@@ -46,7 +46,7 @@ public class CommentScraperService {
                         .contains(keyword.toLowerCase()))
                 .toList();
 
-         log.info("Instagram Comment Service: Foram filtradas {} itens com a keyword \"{}\" no Instagram", response.size(), keyword);
+         log.info("Instagram Comment Service: Foram filtradas {} itens com a keywords \"{}\" no Instagram", response.size(), keyword);
          return response;
     }
 }

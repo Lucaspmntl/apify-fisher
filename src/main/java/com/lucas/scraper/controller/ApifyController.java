@@ -26,14 +26,14 @@ public class ApifyController {
         StopWatch watch = new StopWatch();
         watch.start();
 
-        log.info("Controller: Recebida requisição de coleta para \"{}\"", request.keyword());
+        log.info("Controller: Recebida requisição de coleta para \"{}\"", request.keywords());
         List<IgCommentsOut> response = commentsService
-                .getInstagramFilteredComments(request, request.keyword());
+                .getInstagramFilteredComments(request, request.keywords().toString());
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
 
-        log.info("Controller: Coleta de \"{}\" finalizada. Tempo: {}s", request.keyword(), formatedSec);
+        log.info("Controller: Coleta de \"{}\" finalizada. Tempo: {}s", request.keywords(), formatedSec);
         return ResponseEntity.ok(response);
     }
 }

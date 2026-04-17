@@ -8,5 +8,9 @@ spring:
 
 apify:
   actor-id:
-    comment:
+    instagram-comment:
       SbK00X0JYCPblD2wp
+    facebook-comment:
+      us5srxAYnsrkgUv2v
+server:
+  port: 8080
