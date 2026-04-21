@@ -1,4 +1,11 @@
 package com.lucas.scraper.dto.in;
 
-public record FbCommentsIn() {
+import java.util.ArrayList;
+
+public record FbCommentsIn(
+
+        boolean includeNestedComments, // Always false
+        int resultsLimit,
+        ArrayList<String> startUrls
+) {
 }
