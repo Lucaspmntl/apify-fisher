@@ -40,6 +40,7 @@ public class TtCommentsGateway {
             log.error("Tiktok Gateway: Polling falhou para requisição de id {}.", run.data().runId());
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
+        log.info("Tiktok Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtCommentsOut
         return rawComments.stream().map(raw -> new TtCommentsOut(

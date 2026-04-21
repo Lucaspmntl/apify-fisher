@@ -2,7 +2,10 @@ package com.lucas.scraper.service;
 
 import com.lucas.scraper.dto.in.apify.FbCommentsIn;
 import com.lucas.scraper.dto.out.FbCommentsOut;
+import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.FbCommentsGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +14,27 @@ import java.util.List;
 public class FacebookService {
 
     private final FbCommentsGateway commentsGateway;
+    private static final Logger log = LoggerFactory.getLogger(FacebookService.class);
     public FacebookService(FbCommentsGateway fbCommentsGateway) {
         this.commentsGateway = fbCommentsGateway;
     }
 
-    public List<FbCommentsOut> getFacebookComments(FbCommentsIn input){
-        return commentsGateway.getComments(input);
+    public List<FbCommentsOut> getFacebookComments(String postUrl){
+
+        if (!postUrl.toLowerCase().contains("facebook")) {
+            log.warn("Facebook Service: Requisição ignorada devido invalidade de URL");
+            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
+        }
+
+        log.info("Facebook Service: Iniciando coleta em: {}", postUrl);
+
+        FbCommentsIn input = new FbCommentsIn(
+                false,
+                1000,
+                List.of(postUrl));
+        List<FbCommentsOut> response = commentsGateway.getFacebookComments(input);
+
+        log.info("Facebook Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
+        return response;
     }
 }

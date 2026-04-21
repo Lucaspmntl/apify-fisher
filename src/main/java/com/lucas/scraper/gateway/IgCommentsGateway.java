@@ -31,11 +31,10 @@ public class IgCommentsGateway {
         this.polling = polling;
     }
 
-    public List<IgCommentsOut> getComments(IgCommentsIn input) {
+    public List<IgCommentsOut> getInstagramComments(IgCommentsIn input) {
 
         RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Instagram Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
-
 
         if (!polling.waitForSucceeded(run.data().runId()))
             log.error("Instagram Gateway: Polling falhou para requisição de id {}.", run.data().runId());

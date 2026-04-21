@@ -2,6 +2,7 @@ package com.lucas.scraper.service;
 
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.IgCommentsGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,23 @@ public class InstagramService {
 
 
     public List<IgCommentsOut> getInstagramComments(String postUrl){
-        IgCommentsIn input = new IgCommentsIn(List.of(postUrl), false, false, 1000);
-        return commentsGateway.getComments(input);
+
+        if (!postUrl.toLowerCase().contains("instagram")) {
+            log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
+            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
+        }
+
+        log.info("Instagram Service: Iniciando coleta em: {}", postUrl);
+
+        IgCommentsIn input = new IgCommentsIn(
+                List.of(postUrl),
+                false,
+                false,
+                1000);
+        List<IgCommentsOut> response = commentsGateway.getInstagramComments(input);
+
+        log.info("Instagram Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
+        return response;
     }
 
 

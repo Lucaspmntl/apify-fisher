@@ -31,7 +31,7 @@ public class FbCommentsGateway {
         this.polling = polling;
     }
 
-    public List<FbCommentsOut> getComments(FbCommentsIn input) {
+    public List<FbCommentsOut> getFacebookComments(FbCommentsIn input) {
 
         RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Facebook Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
