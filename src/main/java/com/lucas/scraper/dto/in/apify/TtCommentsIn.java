@@ -1,12 +1,12 @@
-package com.lucas.scraper.dto.in;
+package com.lucas.scraper.dto.in.apify;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public record TtCommentsIn(
         int commentsPerPost,
         boolean excludePinnedPosts, // Always false
         int maxRepliesPerComment, // Always 0
-        ArrayList<String> postURLs,
+        List<String> postURLs,
         int resultsPerPage
 ) {
 }

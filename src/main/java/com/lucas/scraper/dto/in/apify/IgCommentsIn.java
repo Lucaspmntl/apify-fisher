@@ -1,4 +1,4 @@
-package com.lucas.scraper.dto.in;
+package com.lucas.scraper.dto.in.apify;
 
 import java.util.List;
 

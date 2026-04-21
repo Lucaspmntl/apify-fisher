@@ -1,4 +1,4 @@
-package com.lucas.scraper.service.apify;
+package com.lucas.scraper.service;
 
 import com.lucas.scraper.dto.out.startRun.RunResponseOut;
 import org.springframework.cloud.openfeign.FeignClient;

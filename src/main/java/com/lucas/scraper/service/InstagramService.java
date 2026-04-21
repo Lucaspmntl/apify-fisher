@@ -1,11 +1,8 @@
-package com.lucas.scraper.service.apify.comments;
+package com.lucas.scraper.service;
 
-import com.lucas.scraper.dto.in.FbCommentsIn;
-import com.lucas.scraper.dto.in.IgCommentsIn;
-import com.lucas.scraper.dto.in.TtCommentsIn;
-import com.lucas.scraper.dto.out.FbCommentsOut;
+import com.lucas.scraper.dto.in.apify.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
-import com.lucas.scraper.dto.out.TtCommentsOut;
+import com.lucas.scraper.gateway.IgCommentsGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,33 +10,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CommentScraperService {
+public class InstagramService {
 
-    private static final Logger log = LoggerFactory.getLogger(CommentScraperService.class);
-    private final IgCommentsGateway igcommentsGateway;
-    private final FbCommentsGateway fbCommentsGateway;
-    private final TtCommentsGateway ttCommentsGateway;
-    public CommentScraperService(IgCommentsGateway igCommentsGateway,
-                                 FbCommentsGateway fbCommentsGateway,
-                                 TtCommentsGateway ttCommentsGateway) {
-        this.igcommentsGateway = igCommentsGateway;
-        this.fbCommentsGateway = fbCommentsGateway;
-        this.ttCommentsGateway = ttCommentsGateway;
+    private static final Logger log = LoggerFactory.getLogger(InstagramService.class);
+    private final IgCommentsGateway commentsGateway;
+    
+    public InstagramService(IgCommentsGateway igCommentsGateway) {
+        this.commentsGateway = igCommentsGateway;
     }
 
 
-    public List<IgCommentsOut> getInstagramComments(IgCommentsIn input){
-        return igcommentsGateway.getComments(input);
+    public List<IgCommentsOut> getInstagramComments(String postUrl){
+        IgCommentsIn input = new IgCommentsIn(List.of(postUrl), false, false, 1000);
+        return commentsGateway.getComments(input);
     }
-
-    public List<TtCommentsOut> getTiktokComments(TtCommentsIn input){
-        return ttCommentsGateway.getComments(input);
-    }
-
-    public List<FbCommentsOut> getFacebookComments(FbCommentsIn input){
-        return fbCommentsGateway.getComments(input);
-    }
-
 
 
     // TODO: Verificar possibilidade de deixar filtros de comentários para a outra parte da aplicação

@@ -1,6 +1,5 @@
-package com.lucas.scraper.service.apify;
+package com.lucas.scraper.service;
 
-import com.lucas.scraper.exception.PollingFailedException;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
