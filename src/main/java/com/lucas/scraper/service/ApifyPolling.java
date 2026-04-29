@@ -32,7 +32,7 @@ public class ApifyPolling {
 
         do{
             Thread.sleep(5000);
-                watch.stop();
+                //watch.stop();
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
