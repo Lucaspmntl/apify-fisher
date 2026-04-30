@@ -1,9 +1,12 @@
 package com.lucas.scraper.service;
 
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
+import com.lucas.scraper.dto.in.apify.IgProfileIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.IgCommentsGateway;
+import com.lucas.scraper.gateway.IgProfileGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,9 +18,11 @@ public class InstagramService {
 
     private static final Logger log = LoggerFactory.getLogger(InstagramService.class);
     private final IgCommentsGateway commentsGateway;
-    
-    public InstagramService(IgCommentsGateway igCommentsGateway) {
+    private final IgProfileGateway profileGateway;
+
+    public InstagramService(IgCommentsGateway igCommentsGateway, IgProfileGateway profileGateway) {
         this.commentsGateway = igCommentsGateway;
+        this.profileGateway = profileGateway;
     }
 
 
@@ -38,6 +43,20 @@ public class InstagramService {
         List<IgCommentsOut> response = commentsGateway.getInstagramComments(input);
 
         log.info("Instagram Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
+        return response;
+    }
+
+    public List<IgProfileOut> getInstagramProfile(String username){
+
+        log.info("Instagram Profile Service: Iniciando coleta do perfil: {}", username);
+
+        IgProfileIn input = new IgProfileIn(
+                false,
+                List.of(username)
+        );
+        List<IgProfileOut> response = profileGateway.getInstagramProfile(input);
+
+        log.info("Instagram Profile Service: Foram coletados {} perfis para: {}", response.size(), username);
         return response;
     }
 
