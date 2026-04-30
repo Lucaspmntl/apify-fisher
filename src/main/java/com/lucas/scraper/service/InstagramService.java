@@ -1,11 +1,14 @@
 package com.lucas.scraper.service;
 
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
+import com.lucas.scraper.dto.in.apify.IgPostIn;
 import com.lucas.scraper.dto.in.apify.IgProfileIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.IgCommentsGateway;
+import com.lucas.scraper.gateway.IgPostGateway;
 import com.lucas.scraper.gateway.IgProfileGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +22,12 @@ public class InstagramService {
     private static final Logger log = LoggerFactory.getLogger(InstagramService.class);
     private final IgCommentsGateway commentsGateway;
     private final IgProfileGateway profileGateway;
+    private final IgPostGateway postGateway;
 
-    public InstagramService(IgCommentsGateway igCommentsGateway, IgProfileGateway profileGateway) {
+    public InstagramService(IgCommentsGateway igCommentsGateway, IgProfileGateway profileGateway, IgPostGateway postGateway) {
         this.commentsGateway = igCommentsGateway;
         this.profileGateway = profileGateway;
+        this.postGateway = postGateway;
     }
 
 
@@ -57,6 +62,27 @@ public class InstagramService {
         List<IgProfileOut> response = profileGateway.getInstagramProfile(input);
 
         log.info("Instagram Profile Service: Foram coletados {} perfis para: {}", response.size(), username);
+        return response;
+    }
+
+    public List<IgPostOut> getInstagramPost(String postUrl){
+
+        if (!postUrl.toLowerCase().contains("instagram")) {
+            log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
+            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
+        }
+
+        log.info("Instagram Service: Iniciando coleta do post: {}", postUrl);
+
+        IgPostIn input = new IgPostIn(
+                "basicData",
+                24,
+                false,
+                List.of(postUrl)
+        );
+        List<IgPostOut> response = postGateway.getInstagramPost(input);
+
+        log.info("Instagram Service: Foram coletados {} posts para: {}", response.size(), postUrl);
         return response;
     }
 
