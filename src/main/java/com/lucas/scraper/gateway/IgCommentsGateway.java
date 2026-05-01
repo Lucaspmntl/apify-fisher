@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +48,10 @@ public class IgCommentsGateway {
                 (String) raw.get("id"),
                 (String) raw.get("text"),
                 (String) raw.get("ownerUsername"),
-                (String) raw.get("profilePicUrl"),
-                (Date) raw.get("date"),
-                (Integer) raw.get("likesCount"),
-                (Integer) raw.get("repliesCount")
+                (String) raw.get("ownerProfilePicUrl"),
+                OffsetDateTime.parse((String) raw.get("timestamp"))
+                //(Integer) raw.get("likesCount"),
+                //(Integer) raw.get("repliesCount")
         )).toList();
 
     }

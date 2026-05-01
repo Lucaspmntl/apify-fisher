@@ -1,7 +1,11 @@
 package com.lucas.scraper.controller;
 
 import com.lucas.scraper.dto.in.IgFisherCommentsIn;
+import com.lucas.scraper.dto.in.IgFisherPostIn;
+import com.lucas.scraper.dto.in.IgFisherProfileIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
+import com.lucas.scraper.dto.out.IgPostOut;
+import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.service.InstagramService;
 
 import jakarta.validation.Valid;
@@ -17,10 +21,10 @@ import java.util.List;
 @RequestMapping("/api/v1/fisher/instagram")
 public class InstagramController {
 
-    private final InstagramService commentsService;
+    private final InstagramService instagramService;
     private static final Logger log = LoggerFactory.getLogger(InstagramController.class);
-    public InstagramController(InstagramService commentsService) {
-        this.commentsService = commentsService;
+    public InstagramController(InstagramService instagramService) {
+        this.instagramService = instagramService;
     }
 
 
@@ -31,12 +35,44 @@ public class InstagramController {
         watch.start();
 
         log.info("Instagram Controller: Recebida requisição de coleta de comentários em: {}", input.postUrl());
-        List<IgCommentsOut> response = commentsService.getInstagramComments(input.postUrl());
+        List<IgCommentsOut> response = instagramService.getInstagramComments(input.postUrl());
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
 
         log.info("Instagram Controller: Coleta de comentários em {} finalizada. Tempo: {}s", input.postUrl(), formatedSec);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<List<IgProfileOut>> getInstagramProfile(@Valid @RequestBody IgFisherProfileIn input){
+
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        log.info("Instagram Controller: Recebida requisição de coleta de perfil: {}", input.username());
+        List<IgProfileOut> response = instagramService.getInstagramProfile(input.username());
+
+        watch.stop();
+        String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
+
+        log.info("Instagram Profile Controller: Coleta de perfil {} finalizada. Tempo: {}s", input.username(), formatedSec);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<List<IgPostOut>> getInstagramPost(@Valid @RequestBody IgFisherPostIn input){
+
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        log.info("Instagram Controller: Recebida requisição de coleta de post: {}", input.postUrl());
+        List<IgPostOut> response = instagramService.getInstagramPost(input.postUrl());
+
+        watch.stop();
+        String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
+
+        log.info("Instagram Post Controller: Coleta de post {} finalizada. Tempo: {}s", input.postUrl(), formatedSec);
         return ResponseEntity.ok(response);
     }
 }

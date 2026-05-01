@@ -10,8 +10,14 @@ apify:
   actor-id:
     instagram-comment:
       SbK00X0JYCPblD2wp
+    instagram-profile:
+      dSCLg0C3YEZ83HzYX
+    instagram-post:
+      nH2AHrwxeTRJoN5hX
     facebook-comment:
       us5srxAYnsrkgUv2v
+    facebook-post:
+      KoJrdxJCTtpon81KY
     tiktok-comment:
       BDec00yAmCm1QbMEI
 

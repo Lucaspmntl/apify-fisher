@@ -1,7 +1,9 @@
 package com.lucas.scraper.controller;
 
 import com.lucas.scraper.dto.in.FbFisherCommentsIn;
+import com.lucas.scraper.dto.in.FbFisherPostIn;
 import com.lucas.scraper.dto.out.FbCommentsOut;
+import com.lucas.scraper.dto.out.FbPostOut;
 import com.lucas.scraper.service.FacebookService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -36,6 +38,22 @@ public class FacebookController {
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
 
         log.info("Facebook Controller: Coleta de comentários em {} finalizada. Tempo: {}s", input.postUrl(), formatedSec);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<List<FbPostOut>> getFacebookPost(@Valid @RequestBody FbFisherPostIn input){
+
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        log.info("Facebook Controller: Recebida requisição de coleta de post: {}", input.postUrl());
+        List<FbPostOut> response = facebookService.getFacebookPost(input.postUrl());
+
+        watch.stop();
+        String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
+
+        log.info("Facebook Post Controller: Coleta de post {} finalizada. Tempo: {}s", input.postUrl(), formatedSec);
         return ResponseEntity.ok(response);
     }
 }
