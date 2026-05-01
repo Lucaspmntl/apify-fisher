@@ -1,14 +1,17 @@
-package com.lucas.scraper.dto.response;
+package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ApifyCommentsResponseDTO(
+public record IgCommentsOut(
         String id,
         String text,
         String ownerUsername,
-        String ownerProfilePicUrl,
-        String timestamp,
+        @JsonProperty("ownerProfilePicUrl") String profilePicUrl,
+        @JsonProperty("timestamp") Date date,
         Integer likesCount,
         Integer repliesCount
 

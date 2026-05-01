@@ -1,15 +1,19 @@
 spring:
-
   application:
     name:
-      scraper
+      fisher
 
   profiles:
     active: prod
 
 apify:
   actor-id:
-    comment:
+    instagram-comment:
       SbK00X0JYCPblD2wp
+    facebook-comment:
+      us5srxAYnsrkgUv2v
+    tiktok-comment:
+      BDec00yAmCm1QbMEI
 
-
+server:
+  port: 8080
