@@ -28,7 +28,7 @@ public class InstagramController {
     }
 
 
-    @PostMapping("/comments")
+    @PostMapping("/comment")
     public ResponseEntity<List<IgCommentsOut>> getInstagramComments(@Valid @RequestBody IgFisherCommentsIn input){
 
         StopWatch watch = new StopWatch();
