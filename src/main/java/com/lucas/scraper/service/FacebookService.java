@@ -35,7 +35,7 @@ public class FacebookService {
 
         FbCommentsIn input = new FbCommentsIn(
                 false,
-                1000,
+                5,
                 List.of(postUrl));
         List<FbCommentsOut> response = commentsGateway.getFacebookComments(input);
 
@@ -55,7 +55,7 @@ public class FacebookService {
         FbPostIn input = new FbPostIn(
                 false,
                 5,
-                List.of(postUrl));
+                List.of(new FbPostIn.StartUrls(postUrl)));
         List<FbPostOut> response = postGateway.getFacebookPost(input);
 
         log.info("Facebook Service: Foram coletados {} posts para: {}", response.size(), postUrl);
