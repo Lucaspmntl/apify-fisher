@@ -2,8 +2,10 @@ package com.lucas.scraper.controller;
 
 import com.lucas.scraper.dto.in.FbFisherCommentsIn;
 import com.lucas.scraper.dto.in.FbFisherPostIn;
+import com.lucas.scraper.dto.in.FbFisherProfileIn;
 import com.lucas.scraper.dto.out.FbCommentsOut;
 import com.lucas.scraper.dto.out.FbPostOut;
+import com.lucas.scraper.dto.out.FbProfileOut;
 import com.lucas.scraper.service.FacebookService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -25,7 +27,7 @@ public class FacebookController {
     }
 
 
-    @PostMapping("/comments")
+    @PostMapping("/comment")
     public ResponseEntity<List<FbCommentsOut>> getFacebookComments(@Valid @RequestBody FbFisherCommentsIn input){
 
         StopWatch watch = new StopWatch();
@@ -54,6 +56,22 @@ public class FacebookController {
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
 
         log.info("Facebook Post Controller: Coleta de post {} finalizada. Tempo: {}s", input.postUrl(), formatedSec);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<List<FbProfileOut>> getFacebookProfile(@Valid @RequestBody FbFisherProfileIn input){
+
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        log.info("Facebook Controller: Recebida requisição de coleta de perfil: {}", input.profileId());
+        List<FbProfileOut> response = facebookService.getFacebookProfile(input.profileId());
+
+        watch.stop();
+        String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
+
+        log.info("Facebook Profile Controller: Coleta de perfil {} finalizada. Tempo: {}s", input.profileId(), formatedSec);
         return ResponseEntity.ok(response);
     }
 }
