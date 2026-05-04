@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +45,12 @@ public class FbCommentsGateway {
 
         // Transforma os dados List<Map<String, Object>> em um objeto FbCommentsOut
         return rawComments.stream().map(raw -> new FbCommentsOut(
-                (String) raw.get("id"),
-                (String) raw.get("feedbackId"),
-                (Date) raw.get("date"),
+                (String) raw.get("commentId"),
+                OffsetDateTime.parse((String) raw.get("date")),
                 (String) raw.get("text"),
                 (String) raw.get("profilePicture"),
                 (String) raw.get("profileId"),
-                (String) raw.get("likesCount"),
-                (String) raw.get("facebookId"),
-                (String) raw.get("inputUrl")
+                (String) raw.get("likesCount")
         )).toList();
 
     }

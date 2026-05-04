@@ -41,7 +41,7 @@ public class FacebookService {
         FbCommentsIn input = new FbCommentsIn(
                 false,
                 5,
-                List.of(postUrl));
+                List.of(new FbCommentsIn.StartUrls(postUrl)));
         List<FbCommentsOut> response = commentsGateway.getFacebookComments(input);
 
         log.info("Facebook Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
