@@ -1,5 +1,6 @@
 package com.lucas.scraper.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,7 @@ public record FbCommentsOut (
         String feedbackId,
         Date date,
         String text,
-        @JsonProperty("profilePicture") String profilePicUrl,
+        @JsonAlias("profilePicture") String profilePicUrl,
         String profileId,
         String likesCount,
         String facebookId,

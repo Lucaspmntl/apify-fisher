@@ -1,5 +1,6 @@
 package com.lucas.scraper.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,7 +9,7 @@ public record FbProfileOut(
         String name,
         String id,
         String url,
-        @JsonProperty("profilePicUrl") String profilePicUrl,
+        @JsonAlias("profilePicUrl") String profilePicUrl,
         String biography
 ) {
 }

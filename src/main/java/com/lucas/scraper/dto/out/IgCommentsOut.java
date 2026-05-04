@@ -1,5 +1,6 @@
 package com.lucas.scraper.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,8 +12,8 @@ public record IgCommentsOut(
         String id,
         String text,
         String ownerUsername,
-        @JsonProperty("ownerProfilePicUrl") String profilePicUrl,
-        @JsonProperty("timestamp") OffsetDateTime date
+        @JsonAlias("ownerProfilePicUrl") String profilePicUrl,
+        @JsonAlias("timestamp") OffsetDateTime date
         //Integer likesCount,
         //Integer repliesCount
 

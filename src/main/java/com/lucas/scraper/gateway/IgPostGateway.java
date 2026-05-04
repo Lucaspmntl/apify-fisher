@@ -50,6 +50,8 @@ public class IgPostGateway {
                 (String) raw.get("url"),
                 (Integer) raw.get("commentsCount"),
                 (Integer) raw.get("likesCount"),
+                (String) raw.get("displayUrl"),
+                (String) raw.get("videoUrl"),
                 OffsetDateTime.parse((String) raw.get("timestamp"))
         )).toList();
 
