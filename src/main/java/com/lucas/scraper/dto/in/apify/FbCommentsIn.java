@@ -6,6 +6,7 @@ public record FbCommentsIn(
 
         boolean includeNestedComments, // Always false
         int resultsLimit,
-        List<String> startUrls
+        List<StartUrls> startUrls
 ) {
+    public record StartUrls(String url) {}
 }

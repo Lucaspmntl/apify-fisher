@@ -4,18 +4,16 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record FbCommentsOut (
-        String id,
-        String feedbackId,
-        Date date,
+        @JsonAlias("commentId") String id,
+        OffsetDateTime date,
         String text,
         @JsonAlias("profilePicture") String profilePicUrl,
         String profileId,
-        String facebookId,
-        String inputUrl
-        //String likesCount,
+        String likesCount
 ){
 }

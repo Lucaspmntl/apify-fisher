@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record IgPostOut(
+
         @JsonAlias("caption") String description,
         String ownerFullName,
         String ownerUsername,
