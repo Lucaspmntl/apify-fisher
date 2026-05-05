@@ -14,8 +14,8 @@ public record FbCommentsOut (
         String text,
         @JsonAlias("profilePicture") String profilePicUrl,
         String profileId,
-        String likesCount,
         String facebookId,
         String inputUrl
+        //String likesCount,
 ){
 }
