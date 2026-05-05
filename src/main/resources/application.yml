@@ -22,6 +22,8 @@ apify:
       8BRR4FaIO1IrCi7KM
     tiktok-comment:
       BDec00yAmCm1QbMEI
+    tiktok-post:
+      S5h7zRLfKFEr8pdj7
 
 server:
   port: 8080

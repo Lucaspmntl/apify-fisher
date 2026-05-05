@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class TtCommentsGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto TtCommentsOut
         return rawComments.stream().map(raw -> new TtCommentsOut(
                 (String) raw.get("text"),
-                (Date) raw.get("createTimeISO"),
+                OffsetDateTime.parse((String) raw.get("createTimeISO")),
                 (String) raw.get("uniqueId"),
                 (String) raw.get("uid"),
                 (String) raw.get("cid"),
