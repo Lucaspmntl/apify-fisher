@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fisher/facebook")
+@RequestMapping("/fisher/api/v1/facebook")
 public class FacebookController {
 
     private final FacebookService facebookService;
