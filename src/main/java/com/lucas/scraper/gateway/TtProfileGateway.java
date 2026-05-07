@@ -2,7 +2,7 @@ package com.lucas.scraper.gateway;
 
 import com.lucas.scraper.dto.in.apify.TtProfileIn;
 import com.lucas.scraper.dto.out.TtProfileOut;
-import com.lucas.scraper.dto.out.startRun.RunResponseOut;
+import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.service.ApifyGenericFeign;
 import com.lucas.scraper.service.ApifyPolling;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class TtProfileGateway {
 
     public List<TtProfileOut> getProfile(TtProfileIn input) {
 
-        RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Tiktok Profile Gateway: Iniciando a Run de id {} para scraping de perfil", run.data().runId());
 
         if (!polling.waitForSucceeded(run.data().runId()))

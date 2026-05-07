@@ -2,7 +2,7 @@ package com.lucas.scraper.gateway;
 
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsOut;
-import com.lucas.scraper.dto.out.startRun.RunResponseOut;
+import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.service.ApifyGenericFeign;
 import com.lucas.scraper.service.ApifyPolling;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class IgCommentsGateway {
 
     public List<IgCommentsOut> getInstagramComments(IgCommentsIn input) {
 
-        RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Instagram Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
 
         if (!polling.waitForSucceeded(run.data().runId()))

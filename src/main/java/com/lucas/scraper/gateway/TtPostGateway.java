@@ -2,7 +2,7 @@ package com.lucas.scraper.gateway;
 
 import com.lucas.scraper.dto.in.apify.TtPostIn;
 import com.lucas.scraper.dto.out.TtPostOut;
-import com.lucas.scraper.dto.out.startRun.RunResponseOut;
+import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.service.ApifyGenericFeign;
 import com.lucas.scraper.service.ApifyPolling;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class TtPostGateway {
 
     public List<TtPostOut> getPost(TtPostIn input) {
 
-        RunResponseOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Tiktok Post Gateway: Iniciando a Run de id {} para scraping de post", run.data().runId());
 
         if (!polling.waitForSucceeded(run.data().runId()))
