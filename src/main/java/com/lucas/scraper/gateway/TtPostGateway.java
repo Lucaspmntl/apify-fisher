@@ -45,6 +45,7 @@ public class TtPostGateway {
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtPostOut
         return rawPosts.stream().map(raw -> {
+
             // Dados não aninhados
             String id = (String) raw.get("id");
             String description = (String) raw.get("text");

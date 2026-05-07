@@ -1,16 +1,20 @@
 package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
+
 
 public record TtCommentsOut(
+
+        // Comment
+        @JsonAlias("cid") String id,
         String text,
         @JsonAlias("createTimeISO") OffsetDateTime date,
-        @JsonAlias("uniqueId") String id,
-        String uid,
-        String cid,
-        @JsonProperty("avatarThumbnail") String profilePicUrl
+
+        // Comment owner
+        @JsonAlias("uniqueId") String ownerUsername,
+        @JsonAlias("uid") String ownerId,
+        @JsonAlias("avatarThumbnail") String ownerPicUrl
+
 ) {}

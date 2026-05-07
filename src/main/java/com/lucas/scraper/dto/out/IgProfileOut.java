@@ -13,6 +13,6 @@ public record IgProfileOut(
         @JsonAlias("profilePicUrlHD") String profilePicUrlHD,
         boolean privateAccount,
         String fullName,
-        String url
+        @JsonAlias("url") String profileUrl
 ) {
 }

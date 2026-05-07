@@ -44,13 +44,25 @@ public class TtCommentsGateway {
         log.info("Tiktok Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtCommentsOut
-        return rawComments.stream().map(raw -> new TtCommentsOut(
-                (String) raw.get("text"),
-                OffsetDateTime.parse((String) raw.get("createTimeISO")),
-                (String) raw.get("uniqueId"),
-                (String) raw.get("uid"),
-                (String) raw.get("cid"),
-                (String) raw.get("avatarThumbnail")
-        )).toList();
+        return rawComments.stream().map(raw -> {
+
+            String id = (String) raw.get("cid");
+            String text = (String) raw.get("text");
+            String ownerUsername = (String) raw.get("uniqueId");
+            String ownerPicUrl = (String) raw.get("avatarThumbnail");
+            String ownerId = (String) raw.get("uid");
+            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("createTimeISO"));
+
+            return new TtCommentsOut(
+                id,
+                text,
+                date,
+
+                ownerUsername,
+                ownerId,
+                ownerPicUrl
+            );
+
+        }).filter(comments -> comments != null).toList();
     }
 }

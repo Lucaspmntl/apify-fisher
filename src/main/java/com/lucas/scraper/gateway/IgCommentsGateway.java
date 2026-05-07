@@ -44,15 +44,34 @@ public class IgCommentsGateway {
         log.info("Instagram Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto IgCommentsInput
-        return rawComments.stream().map(raw -> new IgCommentsOut(
-                (String) raw.get("id"),
-                (String) raw.get("text"),
-                (String) raw.get("ownerUsername"),
-                (String) raw.get("ownerProfilePicUrl"),
-                OffsetDateTime.parse((String) raw.get("timestamp"))
-                //(Integer) raw.get("likesCount"),
-                //(Integer) raw.get("repliesCount")
-        )).toList();
+        return rawComments.stream().map(raw -> {
 
+            // Dados não aninhados
+            String id = (String) raw.get("id");
+            String text = (String) raw.get("text");
+            String ownerPicUrl = (String) raw.get("ownerProfilePicUrl");
+            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("timestamp"));
+
+            // Campo aninhado da response original
+            Map<String, Object> owner = (Map<String, Object>) raw.get("owner");
+
+            // Extração de campos dentro de owner
+            String ownerId = null;
+            String ownerUsername = null;
+            if (owner != null){
+                ownerId = (String) owner.get("id");
+                ownerUsername = (String) owner.get("full_name");
+            }
+
+            return new IgCommentsOut(
+                    id,
+                    text,
+                    date,
+
+                    ownerUsername,
+                    ownerId,
+                    ownerPicUrl
+            );
+        }).filter(comment -> comment != null).toList();
     }
 }

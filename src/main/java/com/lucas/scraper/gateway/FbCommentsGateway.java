@@ -44,14 +44,27 @@ public class FbCommentsGateway {
         log.info("Facebook Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto FbCommentsOut
-        return rawComments.stream().map(raw -> new FbCommentsOut(
-                (String) raw.get("commentId"),
-                OffsetDateTime.parse((String) raw.get("date")),
-                (String) raw.get("text"),
-                (String) raw.get("profilePicture"),
-                (String) raw.get("profileId"),
-                (String) raw.get("likesCount")
-        )).toList();
+        return rawComments.stream().map(raw -> {
+
+            String id = (String) raw.get("commentId");
+            String text = (String) raw.get("text");
+            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("date"));
+
+            String ownerUsername = (String) raw.get("profileName");
+            String ownerId = (String) raw.get("profileId");
+            String ownerPicUrl = (String) raw.get("profilePicture");
+
+
+            return new FbCommentsOut(
+                    id,
+                    text,
+                    date,
+
+                    ownerUsername,
+                    ownerId,
+                    ownerPicUrl
+            );
+        }).filter(comment -> comment.id() != null).toList();
 
     }
 }

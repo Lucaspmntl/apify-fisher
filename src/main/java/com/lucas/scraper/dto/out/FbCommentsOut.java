@@ -1,19 +1,20 @@
 package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record FbCommentsOut (
+
+        // Comment
         @JsonAlias("commentId") String id,
-        OffsetDateTime date,
         String text,
-        @JsonAlias("profilePicture") String profilePicUrl,
-        String profileId,
-        String likesCount
+        OffsetDateTime date,
+
+        // Comment Owner
+        @JsonAlias("profileName") String ownerUsername,
+        @JsonAlias("profileId") String ownerId,
+        @JsonAlias("profilePicture") String ownerPicUrl
+
 ){
 }

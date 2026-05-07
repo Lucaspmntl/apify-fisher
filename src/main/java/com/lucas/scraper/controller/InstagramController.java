@@ -44,6 +44,7 @@ public class InstagramController {
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping("/profile")
     public ResponseEntity<List<IgProfileOut>> getInstagramProfile(@Valid @RequestBody IgFisherProfileIn input){
 
