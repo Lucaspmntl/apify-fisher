@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -46,11 +50,14 @@ public class FbPostGateway {
         return rawPosts.stream().map(raw -> {
 
             // Dados não aninhados
-            String postUrl = (String) raw.get("facebookUrl");
-            String title = (String) raw.get("previewTitle");
-            String description = (String) raw.get("previewDescription");
             String id = (String) raw.get("id");
-            
+            String description = (String) raw.get("previewDescription");
+            OffsetDateTime date = OffsetDateTime.ofInstant(Instant.ofEpochSecond((Integer) raw.get("publish_time")), ZoneId.systemDefault());
+            String postUrl = (String) raw.get("facebookUrl");
+
+            // Extração de username dentro de URI da publicação (A API não disponibiliza o respectivo dado)
+            String ownerUsername = URI.create(postUrl).getPath().split("/")[1];
+
             // Extração de imageUrl em preferred_thumbnail.image.uri
             String imageUrl = null;
             Map<String, Object> preferredThumbnail = (Map<String, Object>) raw.get("preferred_thumbnail");
@@ -75,18 +82,26 @@ public class FbPostGateway {
                 reactionCount = (Integer) reactionCountObj.get("count");
             }
             
-            // Extract totalCommentCount
-            Integer totalCommentCount = (Integer) raw.get("total_comment_count");
+            // Extract commentCount dentro de comment_rendering_instance.comments
+            Integer commentCount = null;
+            Map<String, Object> commentRenderingInstance = (Map<String, Object>) raw.get("comment_rendering_instance");
+            if (commentRenderingInstance != null) {
+                Map<String, Object> comments = (Map<String, Object>) commentRenderingInstance.get("comments");
+                if (comments != null) {
+                    commentCount = (Integer) comments.get("total_count");
+                }
+            }
             
             return new FbPostOut(
-                postUrl,
-                title,
-                description,
-                id,
-                imageUrl,
-                ownerId,
-                reactionCount,
-                totalCommentCount
+                    id,
+                    description,
+                    date,
+                    commentCount,
+                    reactionCount,
+                    imageUrl,
+                    postUrl,
+                    ownerUsername,
+                    ownerId
             );
         }).toList();
 

@@ -43,17 +43,37 @@ public class IgPostGateway {
         log.info("Instagram Post Gateway: Run de id {} retornou {} itens", run.data().runId(), rawPosts.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto IgPostOut
-        return rawPosts.stream().map(raw -> new IgPostOut(
-                (String) raw.get("caption"),
-                (String) raw.get("ownerFullName"),
-                (String) raw.get("ownerUsername"),
-                (String) raw.get("url"),
-                (Integer) raw.get("commentsCount"),
-                (Integer) raw.get("likesCount"),
-                (String) raw.get("displayUrl"),
-                (String) raw.get("videoUrl"),
-                OffsetDateTime.parse((String) raw.get("timestamp"))
-        )).toList();
+        return rawPosts.stream().map(raw ->{
+
+            String id = (String) raw.get("id");
+            String description = (String) raw.get("caption");
+            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("timestamp"));
+            Integer commentsCount = (Integer) raw.get("commentsCount");
+            Integer likesCount = (Integer) raw.get("likesCount"); // RETORNARÁ -1 CASO LIKES SÓ SEJAM VISIVEIS PARA OWNER
+            String imageUrl = (String) raw.get("displayUrl");
+            String postUrl = (String) raw.get("url");
+            String videoUrl = (String) raw.get("videoUrl"); // RETORNA NULL CASO NÃO SEJA UM VíDEO
+
+            String ownerFullName = (String) raw.get("ownerFullName");
+            String ownerUsername = (String) raw.get("ownerUsername");
+            String ownerId = (String) raw.get("ownerId");
+
+            return new IgPostOut(
+                    id,
+                    description,
+                    date,
+                    commentsCount,
+                    likesCount,
+                    imageUrl,
+                    postUrl,
+                    videoUrl,
+
+                    ownerFullName,
+                    ownerUsername,
+                    ownerId
+            );
+        }
+        ).filter(post -> post.postUrl() != null).toList();
 
     }
 }

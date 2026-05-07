@@ -8,14 +8,20 @@ import java.time.OffsetDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record TtPostOut(
+
+        // Post ---------------------------------------------------------------------------------
         String id,
         @JsonAlias("text") String description,
         @JsonAlias("createTimeISO") OffsetDateTime date,
         @JsonAlias("commentCount") Integer commentsCount,
         @JsonAlias("diggCount") Integer likesCount,
-        @JsonAlias("playCount") Integer viewsCount,
         @JsonAlias("webVideoUrl") String postUrl,
+        @JsonAlias("coverUrl") String imageUrl,
+        // videoUrl -> Não disponibilizado, o link do vídeo é o do post
+
+        // Post owner ---------------------------------------------------------------------------
         String ownerId,
-        @JsonAlias("coverUrl") String imageUrl
+        String ownerUsername,
+        String ownerFullName
 ) {
 }

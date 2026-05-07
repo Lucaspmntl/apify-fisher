@@ -52,14 +52,18 @@ public class TtPostGateway {
             OffsetDateTime date = OffsetDateTime.parse((String) raw.get("createTimeISO"));
             Integer commentsCount = (Integer) raw.get("commentCount");
             Integer likesCount = (Integer) raw.get("diggCount");
-            Integer viewsCount = (Integer) raw.get("playCount");
             String postUrl = (String) raw.get("webVideoUrl");
 
             // Extração de ownerId em authorMeta.id
-            String ownerId = null;
             Map<String, Object> authorMeta = (Map<String, Object>) raw.get("authorMeta");
+
+            String ownerId = null;
+            String ownerUsername = null;
+            String ownerFullName = null;
             if (authorMeta != null) {
                 ownerId = (String) authorMeta.get("id");
+                ownerUsername = (String) authorMeta.get("nickName");
+                ownerFullName = (String) authorMeta.get("name");
             }
 
             // Extração de imageUrl em videoMeta.coverUrl
@@ -70,15 +74,17 @@ public class TtPostGateway {
             }
 
             return new TtPostOut(
-                id,
-                description,
-                date,
-                commentsCount,
-                likesCount,
-                viewsCount,
-                postUrl,
-                ownerId,
-                imageUrl
+                    id,
+                    description,
+                    date,
+                    commentsCount,
+                    likesCount,
+                    postUrl,
+                    imageUrl,
+
+                    ownerId,
+                    ownerUsername,
+                    ownerFullName
             );
         }).toList();
     }
