@@ -1,4 +1,4 @@
-package com.lucas.scraper.service;
+package com.lucas.scraper.utils;
 
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
