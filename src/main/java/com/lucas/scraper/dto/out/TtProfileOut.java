@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record TtProfileOut(
+
         String id,
-        String name,
+        @JsonAlias("name") String username,
+        @JsonAlias("nickName") String fullName,
+        @JsonAlias("signature") String biography,
+        @JsonAlias("avatar") String profilePicUrl,
         String profileUrl,
-        @JsonAlias("nickName") String nickname,
-        @JsonAlias("signature") String description,
-        @JsonAlias("avatar") String imageUrl
+        @JsonAlias("privateAccount") boolean isPrivate
 ) {
 }

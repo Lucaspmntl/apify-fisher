@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record IgProfileOut(
+
         String id,
         String username,
-        String biography,
-        @JsonAlias("profilePicUrl") String profilePicUrl,
-        @JsonAlias("profilePicUrlHD") String profilePicUrlHD,
-        boolean privateAccount,
         String fullName,
-        @JsonAlias("url") String profileUrl
+        String biography,
+        @JsonAlias("profilePicUrlHD") String profilePicUrl,
+        @JsonAlias("url") String profileUrl,
+        @JsonAlias("private") boolean isPrivate
 ) {
 }

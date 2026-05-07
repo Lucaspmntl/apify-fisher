@@ -45,24 +45,25 @@ public class FbProfileGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto FbProfileOut
         return rawProfiles.stream().map(raw -> {
 
-            // Extração de profile em profile
+
+            // Extração de profile
             Map<String, Object> profile = (Map<String, Object>) raw.get("profile");
             if (profile == null) {
                 return null;
             }
 
-            String name = (String) profile.get("name");
             String id = (String) profile.get("profile_id");
-            String url = (String) profile.get("url");
-            String profilePicUrl = (String) profile.get("image");
+            String username = (String) profile.get("name");
             String biography = (String) profile.get("intro");
+            String profilePicUrl = (String) profile.get("image");
+            String profileUrl = (String) profile.get("url");
 
             return new FbProfileOut(
-                name,
                 id,
-                url,
+                username,
+                biography,
                 profilePicUrl,
-                biography
+                profileUrl
             );
         }).filter(profile -> profile != null).toList();
 

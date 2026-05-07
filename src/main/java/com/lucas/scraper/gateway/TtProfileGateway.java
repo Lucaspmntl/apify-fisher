@@ -44,19 +44,29 @@ public class TtProfileGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto TtProfileOut
         return rawProfiles.stream().map(raw -> {
 
-            // Extração de dados aninhados em authorMeta
+            // Extração do campo authorMeta
             Map<String, Object> authorMeta = (Map<String, Object>) raw.get("authorMeta");
-            if (authorMeta != null) {
+
+            if (authorMeta == null)
+                return null;
+
+            String id = (String) authorMeta.get("id");
+            String username = (String) authorMeta.get("name");
+            String fullName = (String) authorMeta.get("nickname");
+            String biography = (String) authorMeta.get("signature");
+            String profilePicUrl = (String) authorMeta.get("avatar");
+            String profileUrl = (String) authorMeta.get("profileUrl");
+            Boolean isPrivate = (Boolean) authorMeta.get("privateAccount");
+
                 return new TtProfileOut(
-                        (String) authorMeta.get("id"),
-                        (String) authorMeta.get("name"),
-                        (String) authorMeta.get("profileUrl"),
-                        (String) authorMeta.get("nickName"),
-                        (String) authorMeta.get("signature"),
-                        (String) authorMeta.get("avatar")
+                        id,
+                        username,
+                        fullName,
+                        biography,
+                        profilePicUrl,
+                        profileUrl,
+                        isPrivate
                 );
-            }
-            return null;
         }).filter(profile -> profile != null).toList();
     }
 }

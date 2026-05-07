@@ -42,16 +42,27 @@ public class IgProfileGateway {
         log.info("Instagram Profile Gateway: Run de id {} retornou {} itens", run.data().runId(), rawProfiles.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto IgProfileOut
-        return rawProfiles.stream().map(raw -> new IgProfileOut(
-                (String) raw.get("id"),
-                (String) raw.get("username"),
-                (String) raw.get("biography"),
-                (String) raw.get("profilePicUrl"),
-                (String) raw.get("profilePicUrlHD"),
-                (Boolean) raw.get("private"),
-                (String) raw.get("fullName"),
-                (String) raw.get("url")
-        )).toList();
+        return rawProfiles.stream().map(raw -> {
+
+            String id = (String) raw.get("id");
+            String username = (String) raw.get("username");
+            String fullName = (String) raw.get("fullName");
+            String biography = (String) raw.get("biography");
+            String profilePicUrl = (String) raw.get("profilePicUrlHD");
+            String profileUrl = (String) raw.get("url");
+            Boolean isPrivate = (Boolean) raw.get("private");
+
+            return new IgProfileOut(
+                    id,
+                    username,
+                    fullName,
+                    biography,
+                    profilePicUrl,
+                    profileUrl,
+                    isPrivate
+            );
+        }
+        ).filter(profile -> profile != null).toList();
 
     }
 }

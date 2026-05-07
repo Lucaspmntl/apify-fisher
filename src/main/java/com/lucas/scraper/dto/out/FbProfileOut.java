@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record FbProfileOut(
-        String name,
+
         String id,
-        String url,
-        @JsonAlias("profilePicUrl") String profilePicUrl,
-        String biography
+        @JsonAlias("name") String username,
+        // fullName -> Não disponibilizado
+        @JsonAlias("intro") String biography,
+        @JsonAlias("image") String profilePicUrl,
+        @JsonAlias("url") String profileUrl
 ) {
 }
