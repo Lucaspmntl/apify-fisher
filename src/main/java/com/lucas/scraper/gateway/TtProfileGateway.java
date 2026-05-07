@@ -52,7 +52,7 @@ public class TtProfileGateway {
 
             String id = (String) authorMeta.get("id");
             String username = (String) authorMeta.get("name");
-            String fullName = (String) authorMeta.get("nickname");
+            String fullName = (String) authorMeta.get("nickName");
             String biography = (String) authorMeta.get("signature");
             String profilePicUrl = (String) authorMeta.get("avatar");
             String profileUrl = (String) authorMeta.get("profileUrl");
