@@ -51,7 +51,7 @@ public class InstagramService {
         return response;
     }
 
-    public List<IgProfileOut> getInstagramProfile(String username){
+    public IgProfileOut getInstagramProfile(String username){
 
         log.info("Instagram Profile Service: Iniciando coleta do perfil: {}", username);
 
@@ -62,10 +62,10 @@ public class InstagramService {
         List<IgProfileOut> response = profileGateway.getInstagramProfile(input);
 
         log.info("Instagram Profile Service: Foram coletados {} perfis para: {}", response.size(), username);
-        return response;
+        return response.getFirst();
     }
 
-    public List<IgPostOut> getInstagramPost(String postUrl){
+    public IgPostOut getInstagramPost(String postUrl){
 
         if (!postUrl.toLowerCase().contains("instagram")) {
             log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
@@ -83,7 +83,7 @@ public class InstagramService {
         List<IgPostOut> response = postGateway.getInstagramPost(input);
 
         log.info("Instagram Service: Foram coletados {} posts para: {}", response.size(), postUrl);
-        return response;
+        return response.getFirst();
     }
 
 

@@ -41,13 +41,13 @@ public class TiktokController {
 
 
     @GetMapping("/post")
-    public ResponseEntity<List<TtPostOut>> getTiktokPost(@RequestParam String postUrl){
+    public ResponseEntity<TtPostOut> getTiktokPost(@RequestParam String postUrl){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Tiktok Controller: Recebida requisição de coleta de post em: {}", postUrl);
-        List<TtPostOut> response = tiktokService.getTiktokPost(postUrl);
+        TtPostOut response = tiktokService.getTiktokPost(postUrl);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
@@ -58,13 +58,13 @@ public class TiktokController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<List<TtProfileOut>> getTikTokProfile(@RequestParam String profile){
+    public ResponseEntity<TtProfileOut> getTikTokProfile(@RequestParam String profile){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Tiktok Controller: Recebida requisição de coleta de perfil TikTok: {}", profile);
-        List<TtProfileOut> response = tiktokService.getTikTokProfile(profile);
+        TtProfileOut response = tiktokService.getTikTokProfile(profile);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());

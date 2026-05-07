@@ -48,7 +48,7 @@ public class FacebookService {
         return response;
     }
 
-    public List<FbPostOut> getFacebookPost(String postUrl){
+    public FbPostOut getFacebookPost(String postUrl){
 
         if (!postUrl.toLowerCase().contains("facebook")) {
             log.warn("Facebook Service: Requisição ignorada devido invalidade de URL");
@@ -64,10 +64,10 @@ public class FacebookService {
         List<FbPostOut> response = postGateway.getFacebookPost(input);
 
         log.info("Facebook Service: Foram coletados {} posts para: {}", response.size(), postUrl);
-        return response;
+        return response.getFirst();
     }
 
-    public List<FbProfileOut> getFacebookProfile(String profileId){
+    public FbProfileOut getFacebookProfile(String profileId){
 
         String profileUrl = "https://www.facebook.com/" + profileId;
 
@@ -81,6 +81,6 @@ public class FacebookService {
         List<FbProfileOut> response = profileGateway.getFacebookProfile(input);
 
         log.info("Facebook Service: Foram coletados {} perfis para: {}", response.size(), profileUrl);
-        return response;
+        return response.getFirst();
     }
 }

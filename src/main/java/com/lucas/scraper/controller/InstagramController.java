@@ -42,13 +42,13 @@ public class InstagramController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<List<IgProfileOut>> getInstagramProfile(@RequestParam String profile){
+    public ResponseEntity<IgProfileOut> getInstagramProfile(@RequestParam String profile){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Instagram Controller: Recebida requisição de coleta de perfil: {}", profile);
-        List<IgProfileOut> response = instagramService.getInstagramProfile(profile);
+        IgProfileOut response = instagramService.getInstagramProfile(profile);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
@@ -59,13 +59,13 @@ public class InstagramController {
 
 
     @GetMapping("/post")
-    public ResponseEntity<List<IgPostOut>> getInstagramPost(@RequestParam String postUrl){
+    public ResponseEntity<IgPostOut> getInstagramPost(@RequestParam String postUrl){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Instagram Controller: Recebida requisição de coleta de post: {}", postUrl);
-        List<IgPostOut> response = instagramService.getInstagramPost(postUrl);
+        IgPostOut response = instagramService.getInstagramPost(postUrl);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());

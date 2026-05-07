@@ -51,7 +51,7 @@ public class TiktokService {
     }
 
 
-    public List<TtPostOut> getTiktokPost(String postUrl){
+    public TtPostOut getTiktokPost(String postUrl){
 
         if (!postUrl.toLowerCase().contains("tiktok")) {
             log.warn("Tiktok Service: Requisição ignorada devido invalidade de URL");
@@ -71,11 +71,11 @@ public class TiktokService {
         List<TtPostOut> response = postGateway.getPost(input);
 
         log.info("TikTok Service: Foram coletados {} posts em: {}", response.size(), postUrl);
-        return response;
+        return response.getFirst();
     }
 
 
-    public List<TtProfileOut> getTikTokProfile(String profileId){
+    public TtProfileOut getTikTokProfile(String profileId){
 
         log.info("TikTok Service: Iniciando coleta do perfil: {}", profileId);
 
@@ -94,6 +94,6 @@ public class TiktokService {
         List<TtProfileOut> response = profileGateway.getProfile(input);
 
         log.info("TikTok Service: Foram coletados {} perfis para: {}", response.size(), profileId);
-        return response;
+        return response.getFirst();
     }
 }

@@ -42,13 +42,13 @@ public class FacebookController {
 
 
     @GetMapping("/post")
-    public ResponseEntity<List<FbPostOut>> getFacebookPost(@RequestParam String postUrl){
+    public ResponseEntity<FbPostOut> getFacebookPost(@RequestParam String postUrl){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Facebook Controller: Recebida requisição de coleta de post: {}", postUrl);
-        List<FbPostOut> response = facebookService.getFacebookPost(postUrl);
+        FbPostOut response = facebookService.getFacebookPost(postUrl);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
@@ -59,13 +59,13 @@ public class FacebookController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<List<FbProfileOut>> getFacebookProfile(@RequestParam String profile){
+    public ResponseEntity<FbProfileOut> getFacebookProfile(@RequestParam String profile){
 
         StopWatch watch = new StopWatch();
         watch.start();
 
         log.info("Facebook Controller: Recebida requisição de coleta de perfil: {}", profile);
-        List<FbProfileOut> response = facebookService.getFacebookProfile(profile);
+        FbProfileOut response = facebookService.getFacebookProfile(profile);
 
         watch.stop();
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
