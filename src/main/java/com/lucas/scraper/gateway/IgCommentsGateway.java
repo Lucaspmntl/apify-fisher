@@ -1,6 +1,7 @@
 package com.lucas.scraper.gateway;
 
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
+import com.lucas.scraper.dto.out.AbortRunOut;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
@@ -30,6 +31,7 @@ public class IgCommentsGateway {
         this.apifyClient = apifyClient;
         this.polling = polling;
     }
+
 
     public List<IgCommentsOut> getInstagramComments(IgCommentsIn input) {
 
@@ -72,5 +74,9 @@ public class IgCommentsGateway {
                     ownerPicUrl
             );
         }).filter(comment -> comment != null).toList();
+    }
+
+    public AbortRunOut abort(String runId) {
+        return apifyClient.abortRun(runId, "Bearer " + token);
     }
 }

@@ -1,5 +1,6 @@
 package com.lucas.scraper.utils;
 
+import com.lucas.scraper.dto.out.AbortRunOut;
 import com.lucas.scraper.dto.out.RunOut;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,13 @@ public interface ApifyGenericFeign {
 
     @GetMapping(value = "/actor-runs/{runId}", consumes = "application/json", produces = "application/json")
     public RunOut getRunDetails(
+            @PathVariable String runId,
+            @RequestHeader("Authorization") String token
+    );
+
+
+    @PostMapping(value = "/actor-runs/{runId}/abort", consumes = "application/json", produces = "application/json")
+    public AbortRunOut abortRun(
             @PathVariable String runId,
             @RequestHeader("Authorization") String token
     );
