@@ -37,9 +37,9 @@ public class IgCommentsGateway {
     }
 
 
-    public List<IgCommentsOut> getInstagramComments(IgCommentsIn input) {
+    public List<IgCommentsOut> getInstagramComments(IgCommentsIn data) {
 
-        RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
+        RunOut run = apifyClient.startRun(actorId, data, "Bearer " + token);
         log.info("Instagram Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
 
         if (!polling.waitForSucceeded(run.data().runId()))
@@ -80,11 +80,19 @@ public class IgCommentsGateway {
         }).filter(comment -> comment != null).toList();
     }
 
-    @SneakyThrows
-    public IgCommentsDeltaOut getDeltaInstagramComments(IgFisherDeltaCommentsIn input) {
 
-        List<String> commentsIds = input.lastCommentsIds();
+    @SneakyThrows
+    public IgCommentsDeltaOut getDeltaInstagramComments(IgFisherDeltaCommentsIn data) {
+
+        List<String> commentsIds = data.lastCommentsIds();
         boolean deltaFound;
+
+        // TODO: Levar esse input para o InstagramService
+        IgCommentsIn input = new IgCommentsIn(
+                List.of(data.postUrl()),
+                false,
+                false,
+                data.resultsLimit());
 
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         String runId = run.data().runId();
@@ -163,7 +171,6 @@ public class IgCommentsGateway {
         for (int i = 0; i < currentScrapedComments.size(); i++) {
 
             String currentId = (String) currentScrapedComments.get(i).get("id");
-
             boolean isFounded = lastCommentsIds.contains(currentId);
 
             if (isFounded) {
@@ -175,12 +182,13 @@ public class IgCommentsGateway {
                 // Corta a lista de comentários até o comentário encontrado,
                 // desconsiderando o comentário encontrado e comentários posteriores
                 List<Map<String, Object>> slicedComments = currentScrapedComments.subList(0, i);
+
+                // Retorna um par, sendo formado por um booleano informando se o delta foi encontrado e os comentários encontrados até então
                 return Pair.of(deltaFound, slicedComments);
             }
         }
 
-
-
+        log.warn("Instagram Gateway: Comentário de ID delta não encontrado, retonarndo lista de {} comentários encontrados até o momento.", currentScrapedComments.size());
         return Pair.of(deltaFound, currentScrapedComments);
     }
 }

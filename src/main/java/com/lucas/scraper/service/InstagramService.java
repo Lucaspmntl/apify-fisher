@@ -4,6 +4,7 @@ import com.lucas.scraper.dto.in.IgFisherDeltaCommentsIn;
 import com.lucas.scraper.dto.in.apify.IgCommentsIn;
 import com.lucas.scraper.dto.in.apify.IgPostIn;
 import com.lucas.scraper.dto.in.apify.IgProfileIn;
+import com.lucas.scraper.dto.out.IgCommentsDeltaOut;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
@@ -53,22 +54,18 @@ public class InstagramService {
     }
 
 
-    public List<IgCommentsOut> getDeltaInstagramComments(IgFisherDeltaCommentsIn data){
+    public IgCommentsDeltaOut getDeltaInstagramComments(IgFisherDeltaCommentsIn data){
 
         if (!data.postUrl().toLowerCase().contains("instagram")) {
             log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
             throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
         }
 
-        IgCommentsIn input = new IgCommentsIn(
-                List.of(data.postUrl()),
-                false,
-                false,
-                data.resultsLimit());
+        // TODO: Trazer a instanciação do input para client Feign para cá
 
-        commentsGateway.getInstagramComments(input);
+        log.info("Instagram Profile Service: Iniciando coleta parcial para comentários de ID's {}", data.lastCommentsIds().toString());
 
-        return null;
+        return commentsGateway.getDeltaInstagramComments(data);
     }
 
 
@@ -85,6 +82,7 @@ public class InstagramService {
         log.info("Instagram Profile Service: Foram coletados {} perfis para: {}", response.size(), username);
         return response.getFirst();
     }
+
 
     public IgPostOut getInstagramPost(String postUrl){
 

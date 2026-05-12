@@ -1,5 +1,7 @@
 package com.lucas.scraper.controller;
 
+import com.lucas.scraper.dto.in.IgFisherDeltaCommentsIn;
+import com.lucas.scraper.dto.out.IgCommentsDeltaOut;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
@@ -37,6 +39,22 @@ public class InstagramController {
         String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
 
         log.info("Instagram Controller: Coleta de comentários em {} finalizada. Tempo: {}s", postUrl, formatedSec);
+        return ResponseEntity.ok(response);
+    }
+
+    public ResponseEntity<IgCommentsDeltaOut> getInstagramDeltaComments(@RequestBody IgFisherDeltaCommentsIn data){
+
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        log.info("Instagram Comments Controller: Recebida requisição de coleta PARCIAL de comentários em: {}", data.postUrl());
+        IgCommentsDeltaOut response = instagramService.getDeltaInstagramComments(data);
+
+        watch.stop();
+        String formatedSec = String.format("%.2f", watch.getTotalTimeSeconds());
+
+        log.info("Instagram Comments Controller: Coleta de comentários parciais finalizada. Tempo: {}s", formatedSec);
+
         return ResponseEntity.ok(response);
     }
 
