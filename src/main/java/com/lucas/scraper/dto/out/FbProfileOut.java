@@ -14,4 +14,14 @@ public record FbProfileOut(
         @JsonAlias("image") String profilePicUrl,
         @JsonAlias("url") String profileUrl
 ) {
+
+    // O actor cleansyntax/facebook-profile-posts-scraper as vezes falha em retonar todos os dados, retornando uma lista
+    // com o objetos vazios (""), o método verifica essa possibilidade
+    public boolean isBlankPayload() {
+        return (this.id == null || this.id.isBlank()) &&
+                (this.profileUrl == null || this.profileUrl.isBlank()) &&
+                (this.biography == null || this.biography.isBlank()) &&
+                (this.username == null || this.username.isBlank()) &&
+                (this.profilePicUrl == null || this.profilePicUrl.isBlank());
+    }
 }

@@ -6,10 +6,12 @@ import com.lucas.scraper.dto.in.apify.FbProfileIn;
 import com.lucas.scraper.dto.out.FbCommentsOut;
 import com.lucas.scraper.dto.out.FbPostOut;
 import com.lucas.scraper.dto.out.FbProfileOut;
+import com.lucas.scraper.exception.InvalidResponseDataException;
 import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.FbCommentsGateway;
 import com.lucas.scraper.gateway.FbPostGateway;
 import com.lucas.scraper.gateway.FbProfileGateway;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,8 @@ public class FacebookService {
         return response.getFirst();
     }
 
+
+    @SneakyThrows
     public FbProfileOut getFacebookProfile(String profileId){
 
         String profileUrl = "https://www.facebook.com/" + profileId;
@@ -78,7 +82,30 @@ public class FacebookService {
                 0,
                 profileUrl
         );
-        List<FbProfileOut> response = profileGateway.getFacebookProfile(input);
+
+        List<FbProfileOut> response = null;
+        int attempts = 0;
+        int maxAttempts = 5;
+        boolean hasValidData = false;
+
+        do {
+            attempts++;
+            response = profileGateway.getFacebookProfile(input);
+
+            if (response != null && !response.isEmpty() && !response.getFirst().isBlankPayload()) {
+                hasValidData = true;
+                break;
+            }
+
+            log.warn("Facebook Service: Retorno vazio ou inválido na tentativa {} para {}. Tentando novamente...", attempts, profileUrl);
+            Thread.sleep(3500);
+
+        } while (attempts < maxAttempts);
+
+        if (!hasValidData){
+            log.error("Facebook Service: Um erro externo impossibilitou coletar os dados de {}. \nTentativas totais: {}", profileUrl, attempts);
+            throw new InvalidResponseDataException("Não foi possível coletar os dados do perfil após o limite de tentativas.");
+        }
 
         log.info("Facebook Service: Foram coletados {} perfis para: {}", response.size(), profileUrl);
         return response.getFirst();
