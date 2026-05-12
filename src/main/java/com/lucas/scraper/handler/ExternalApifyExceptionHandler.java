@@ -8,37 +8,37 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExternalApifyExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(ResourceNotFoundException.class)
     public GenericMessageOut resourceNotFoundException(ResourceNotFoundException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(InvalidInputException.class)
     public GenericMessageOut invalidInputException(InvalidInputException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(InsufficientPermissionsException.class)
     public GenericMessageOut insufficientPermissionsException(InsufficientPermissionsException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(MethodNotAllowedException.class)
     public GenericMessageOut methodNotAllowedException(MethodNotAllowedException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(RateLimitExceedException.class)
     public GenericMessageOut rateLimitExceedException(RateLimitExceedException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(InvalidTokenException.class)
     public GenericMessageOut invalidTokenException(InvalidTokenException e) {
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(DefaultIntegrationException.class)
     public GenericMessageOut defaultIntegrationException(DefaultIntegrationException e){
         return new GenericMessageOut(e.getMessage(), e.getDetails().statusCode());
     }
