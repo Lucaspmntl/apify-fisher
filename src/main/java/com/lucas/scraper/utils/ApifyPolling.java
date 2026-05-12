@@ -32,7 +32,6 @@ public class ApifyPolling {
 
         do{
             Thread.sleep(5000);
-                //watch.stop();
 
             status = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
@@ -48,5 +47,17 @@ public class ApifyPolling {
         watch.stop();
         log.info("Polling: Polling concluído em {}s", watch.getTotalTimeSeconds());
         return true;
+    }
+
+
+    /*
+        Retorna true se o status da run for "RUNNING".
+     */
+    public boolean isStatusRunning(String runId){
+
+        return apifyClient.getRunDetails(runId, "Bearer " + token)
+                .data()
+                .status()
+                .equalsIgnoreCase("RUNNING");
     }
 }
