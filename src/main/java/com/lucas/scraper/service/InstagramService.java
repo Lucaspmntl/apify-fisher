@@ -12,6 +12,7 @@ import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.IgCommentsGateway;
 import com.lucas.scraper.gateway.IgPostGateway;
 import com.lucas.scraper.gateway.IgProfileGateway;
+import com.lucas.scraper.utils.ValidationsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class InstagramService {
     }
 
 
+
     public List<IgCommentsOut> getInstagramComments(String postUrl){
 
         if (!postUrl.toLowerCase().contains("instagram")) {
@@ -49,9 +51,12 @@ public class InstagramService {
                 1000);
         List<IgCommentsOut> response = commentsGateway.getInstagramComments(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("Instagram Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
         return response;
     }
+
 
 
     public IgCommentsDeltaOut getDeltaInstagramComments(IgFisherDeltaCommentsIn data){
@@ -65,8 +70,14 @@ public class InstagramService {
 
         log.info("Instagram Profile Service: Iniciando coleta parcial para comentários de ID's {}", data.lastCommentsIds().toString());
 
-        return commentsGateway.getDeltaInstagramComments(data);
+        IgCommentsDeltaOut response = commentsGateway.getDeltaInstagramComments(data);
+
+        ValidationsUtils.parseDataVality(response.comments());
+
+        log.info("Instagram Profile Service: Foram coletados {} comentários parciais para: {}", response.comments().size(), data.postUrl());
+        return response;
     }
+
 
 
     public IgProfileOut getInstagramProfile(String username){
@@ -79,9 +90,12 @@ public class InstagramService {
         );
         List<IgProfileOut> response = profileGateway.getInstagramProfile(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("Instagram Profile Service: Foram coletados {} perfis para: {}", response.size(), username);
         return response.getFirst();
     }
+
 
 
     public IgPostOut getInstagramPost(String postUrl){
@@ -99,7 +113,10 @@ public class InstagramService {
                 false,
                 List.of(postUrl)
         );
+
         List<IgPostOut> response = postGateway.getInstagramPost(input);
+
+        ValidationsUtils.parseDataVality(response);
 
         log.info("Instagram Service: Foram coletados {} posts para: {}", response.size(), postUrl);
         return response.getFirst();

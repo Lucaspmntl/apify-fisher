@@ -11,6 +11,8 @@ import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.FbCommentsGateway;
 import com.lucas.scraper.gateway.FbPostGateway;
 import com.lucas.scraper.gateway.FbProfileGateway;
+import com.lucas.scraper.utils.ValidationsUtils;
+import com.lucas.scraper.utils.ValidatablePayload;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +27,13 @@ public class FacebookService {
     private final FbPostGateway postGateway;
     private final FbProfileGateway profileGateway;
     private static final Logger log = LoggerFactory.getLogger(FacebookService.class);
+
     public FacebookService(FbCommentsGateway fbCommentsGateway, FbPostGateway fbPostGateway, FbProfileGateway fbProfileGateway) {
         this.commentsGateway = fbCommentsGateway;
         this.postGateway = fbPostGateway;
         this.profileGateway = fbProfileGateway;
     }
+
 
     public List<FbCommentsOut> getFacebookComments(String postUrl){
 
@@ -46,9 +50,13 @@ public class FacebookService {
                 List.of(new FbCommentsIn.StartUrls(postUrl)));
         List<FbCommentsOut> response = commentsGateway.getFacebookComments(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("Facebook Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
         return response;
     }
+
+
 
     public FbPostOut getFacebookPost(String postUrl){
 
@@ -59,15 +67,19 @@ public class FacebookService {
 
         log.info("Facebook Service: Iniciando coleta do post: {}", postUrl);
 
+
         FbPostIn input = new FbPostIn(
                 false,
                 5,
                 List.of(new FbPostIn.StartUrls(postUrl)));
         List<FbPostOut> response = postGateway.getFacebookPost(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("Facebook Service: Foram coletados {} posts para: {}", response.size(), postUrl);
         return response.getFirst();
     }
+
 
 
     @SneakyThrows
@@ -103,11 +115,21 @@ public class FacebookService {
         } while (attempts < maxAttempts);
 
         if (!hasValidData){
-            log.error("Facebook Service: Um erro externo impossibilitou coletar os dados de {}. \nTentativas totais: {}", profileUrl, attempts);
+            log.error("Facebook Service: Dados vazios ou nulos, um erro externo impossibilitou coletar os dados de {}. \nTentativas totais: {}", profileUrl, attempts);
             throw new InvalidResponseDataException("Não foi possível coletar os dados do perfil após o limite de tentativas.");
         }
 
         log.info("Facebook Service: Foram coletados {} perfis para: {}", response.size(), profileUrl);
         return response.getFirst();
+    }
+
+    // Engloba no parametro todos os records de DTO's que implementam ResponseDataValidator
+    private void hasValidData(List<? extends ValidatablePayload> response){
+        boolean isValid = response != null && !response.isEmpty() && !response.getFirst().isBlankPayload();
+
+        if(!isValid){
+            log.error("Facebook Service: Dados vazios ou nulos. Ocorreu um erro externo impedindo a coleta dos dados do post.");
+            throw new InvalidResponseDataException("Não foi possível coletar os dados do post por serem inválidos ou nulos.");
+        }
     }
 }

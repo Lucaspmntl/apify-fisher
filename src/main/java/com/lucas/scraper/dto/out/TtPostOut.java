@@ -2,7 +2,7 @@ package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lucas.scraper.utils.ValidatablePayload;
 
 import java.time.OffsetDateTime;
 
@@ -23,5 +23,19 @@ public record TtPostOut(
         String ownerId,
         String ownerUsername,
         String ownerFullName
-) {
+) implements ValidatablePayload {
+
+    @Override
+    public boolean isBlankPayload() {
+        return (this.id == null || this.id.isBlank()) &&
+                (this.description == null || this.description.isBlank()) &&
+                this.date == null &&
+                this.commentsCount == null &&
+                this.likesCount == null &&
+                (this.postUrl == null || this.postUrl.isBlank()) &&
+                (this.imageUrl == null || this.imageUrl.isBlank()) &&
+                (this.ownerId == null || this.ownerId.isBlank()) &&
+                (this.ownerUsername == null || this.ownerUsername.isBlank()) &&
+                (this.ownerFullName == null || this.ownerFullName.isBlank());
+    }
 }

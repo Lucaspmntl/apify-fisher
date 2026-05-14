@@ -2,7 +2,7 @@ package com.lucas.scraper.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lucas.scraper.utils.ValidatablePayload;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record TtProfileOut(
@@ -14,5 +14,16 @@ public record TtProfileOut(
         @JsonAlias("avatar") String profilePicUrl,
         String profileUrl,
         @JsonAlias("privateAccount") boolean isPrivate
-) {
+
+) implements ValidatablePayload {
+
+    @Override
+    public boolean isBlankPayload() {
+        return (this.id == null || this.id.isBlank()) &&
+                (this.username == null || this.username.isBlank()) &&
+                (this.fullName == null || this.fullName.isBlank()) &&
+                (this.biography == null || this.biography.isBlank()) &&
+                (this.profilePicUrl == null || this.profilePicUrl.isBlank()) &&
+                (this.profileUrl == null || this.profileUrl.isBlank());
+    }
 }

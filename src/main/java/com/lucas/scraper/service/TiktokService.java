@@ -10,6 +10,7 @@ import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.TtCommentsGateway;
 import com.lucas.scraper.gateway.TtPostGateway;
 import com.lucas.scraper.gateway.TtProfileGateway;
+import com.lucas.scraper.utils.ValidationsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ public class TiktokService {
                 1000);
         List<TtCommentsOut> response = commentsGateway.getComments(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("Instagram Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
         return response;
     }
@@ -70,6 +73,8 @@ public class TiktokService {
                 "NEVER_DOWNLOAD_SUBTITLES");
         List<TtPostOut> response = postGateway.getPost(input);
 
+        ValidationsUtils.parseDataVality(response);
+
         log.info("TikTok Service: Foram coletados {} posts em: {}", response.size(), postUrl);
         return response.getFirst();
     }
@@ -92,6 +97,8 @@ public class TiktokService {
                 "NEVER_DOWNLOAD_SUBTITLES"
         );
         List<TtProfileOut> response = profileGateway.getProfile(input);
+
+        ValidationsUtils.parseDataVality(response);
 
         log.info("TikTok Service: Foram coletados {} perfis para: {}", response.size(), profileId);
         return response.getFirst();
