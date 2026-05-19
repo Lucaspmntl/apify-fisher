@@ -42,6 +42,7 @@ public class InstagramController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/comment/delta")
     public ResponseEntity<IgCommentsDeltaOut> getInstagramDeltaComments(@RequestBody IgFisherDeltaCommentsIn data){
 
         StopWatch watch = new StopWatch();
