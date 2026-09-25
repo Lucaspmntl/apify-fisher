@@ -36,12 +36,12 @@ public class TtPostGateway {
     public List<TtPostOut> getPost(TtPostIn input) {
 
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
-        log.info("Tiktok Post Gateway: Iniciando a Run de id {} para scraping de post", run.data().runId());
+        log.info("TikTok Post Gateway: Iniciando a Run de id {} para scraping de post", run.data().runId());
 
         polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawPosts = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
-        log.info("Tiktok Post Gateway: Run de id {} retornou {} itens", run.data().runId(), rawPosts.size());
+        log.info("TikTok Post Gateway: Run de id {} retornou {} itens", run.data().runId(), rawPosts.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtPostOut
         return rawPosts.stream().map(raw -> {

@@ -35,12 +35,12 @@ public class TtCommentsGateway {
     public List<TtCommentsOut> getComments(TtCommentsIn input) {
 
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
-        log.info("Tiktok Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
+        log.info("TikTok Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
 
         polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
-        log.info("Tiktok Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
+        log.info("TikTok Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtCommentsOut
         return rawComments.stream().map(raw -> {

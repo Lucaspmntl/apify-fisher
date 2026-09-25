@@ -17,19 +17,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TiktokService {
+public class TikTokService {
 
     private final TtCommentsGateway commentsGateway;
     private final TtPostGateway postGateway;
     private final TtProfileGateway profileGateway;
-    private static final Logger log = LoggerFactory.getLogger(TiktokService.class);
-    public TiktokService(TtCommentsGateway ttCommentsGateway, TtPostGateway ttPostGateway, TtProfileGateway ttProfileGateway) {
+    private static final Logger log = LoggerFactory.getLogger(TikTokService.class);
+    public TikTokService(TtCommentsGateway ttCommentsGateway, TtPostGateway ttPostGateway, TtProfileGateway ttProfileGateway) {
         this.commentsGateway = ttCommentsGateway;
         this.postGateway = ttPostGateway;
         this.profileGateway = ttProfileGateway;
     }
 
-    public List<TtCommentsOut> getTiktokComments(String postUrl){
+    public List<TtCommentsOut> getTikTokComments(String postUrl){
 
         ValidationsUtils.validatePlatformUrl(postUrl, "TikTok");
 
@@ -50,7 +50,7 @@ public class TiktokService {
     }
 
 
-    public TtPostOut getTiktokPost(String postUrl){
+    public TtPostOut getTikTokPost(String postUrl){
 
         ValidationsUtils.validatePlatformUrl(postUrl, "TikTok");
 

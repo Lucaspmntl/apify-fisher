@@ -105,5 +105,10 @@ tipos) é o que torna o projeto previsível.
   aberto sobre se filtros de comentário deveriam ficar no Hawk em vez do `fisher`.
 - `ValidationsUtils`: falta validação de URL reutilizável (hoje cada `Service` reimplementa o check "contém nome
   da plataforma" à mão, repetido por método dentro da mesma classe).
-- Mensagens de erro com copy-paste: `FacebookService.java:42` e `TiktokService.java:37` lançam
-  `InvalidURLException` com o texto "objeto do Instagram" mesmo validando URL de Facebook/TikTok.
+- ~~Mensagens de erro com copy-paste~~ — corrigido: validação de URL centralizada em
+  `ValidationsUtils.validatePlatformUrl`.
+- ~~Polling sem timeout~~ — corrigido: `ApifyPolling.waitForSucceeded` tem limite de tentativas e lança
+  `PollingFailedException` em estado terminal de falha.
+- Classe de serviço/controller do TikTok usa a grafia oficial da marca (`TikTokService`,
+  `TikTokController`), enquanto os DTOs/gateways usam o prefixo `Tt` (abreviação, não a palavra completa) —
+  mantenha essa convenção ao tocar nesses arquivos.

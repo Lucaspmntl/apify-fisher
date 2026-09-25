@@ -34,12 +34,12 @@ public class TtProfileGateway {
     public List<TtProfileOut> getProfile(TtProfileIn input) {
 
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
-        log.info("Tiktok Profile Gateway: Iniciando a Run de id {} para scraping de perfil", run.data().runId());
+        log.info("TikTok Profile Gateway: Iniciando a Run de id {} para scraping de perfil", run.data().runId());
 
         polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawProfiles = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
-        log.info("Tiktok Profile Gateway: Run de id {} retornou {} itens", run.data().runId(), rawProfiles.size());
+        log.info("TikTok Profile Gateway: Run de id {} retornou {} itens", run.data().runId(), rawProfiles.size());
 
         // Transforma os dados List<Map<String, Object>> em um objeto TtProfileOut
         return rawProfiles.stream().map(raw -> {
