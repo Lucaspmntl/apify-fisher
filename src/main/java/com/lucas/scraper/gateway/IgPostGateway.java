@@ -36,8 +36,7 @@ public class IgPostGateway {
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Instagram Post Gateway: Iniciando a Run de id {} para scraping de post", run.data().runId());
 
-        if (!polling.waitForSucceeded(run.data().runId()))
-            log.error("Instagram Post Gateway: Polling falhou para requisição de id {}.", run.data().runId());
+        polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawPosts = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
         log.info("Instagram Post Gateway: Run de id {} retornou {} itens", run.data().runId(), rawPosts.size());

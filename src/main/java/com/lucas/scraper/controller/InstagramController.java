@@ -7,6 +7,7 @@ import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.service.InstagramService;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class InstagramController {
     }
 
     @PostMapping("/comment/delta")
-    public ResponseEntity<IgCommentsDeltaOut> getInstagramDeltaComments(@RequestBody IgFisherDeltaCommentsIn data){
+    public ResponseEntity<IgCommentsDeltaOut> getInstagramDeltaComments(@Valid @RequestBody IgFisherDeltaCommentsIn data){
 
         StopWatch watch = new StopWatch();
         watch.start();

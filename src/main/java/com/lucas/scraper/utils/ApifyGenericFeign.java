@@ -1,5 +1,6 @@
 package com.lucas.scraper.utils;
 
+import com.lucas.scraper.config.ApifyFeignConfig;
 import com.lucas.scraper.dto.out.AbortRunOut;
 import com.lucas.scraper.dto.out.RunOut;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "apify", url = "https://api.apify.com/v2")
+@FeignClient(name = "apify", url = "https://api.apify.com/v2", configuration = ApifyFeignConfig.class)
 public interface ApifyGenericFeign {
 
     @PostMapping(value = "/acts/{actorId}/runs?waitForFinish=5", consumes = "application/json", produces = "application/json")

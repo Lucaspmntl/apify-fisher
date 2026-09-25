@@ -1,5 +1,6 @@
 package com.lucas.scraper.utils;
 
+import com.lucas.scraper.exception.PollingFailedException;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +8,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
+import java.util.Set;
+
 @Service
 public class ApifyPolling {
+
+    // ponytail: limite fixo de tentativas (5min), sem backoff exponencial — trocar se o Apify passar a
+    // demorar mais que isso rotineiramente
+    public static final int MAX_ATTEMPTS = 60;
+    private static final Set<String> FAILURE_STATUSES = Set.of("FAILED", "ABORTED", "TIMED-OUT");
 
     @Value("${apify.token}")
     String token;
@@ -21,7 +29,7 @@ public class ApifyPolling {
     }
 
     @SneakyThrows
-    public boolean waitForSucceeded(String runId) {
+    public void waitForSucceeded(String runId) {
         StopWatch watch = new StopWatch();
         watch.start();
 
@@ -37,16 +45,26 @@ public class ApifyPolling {
 
             log.debug("Gateway: Tentativa {} de polling, status atual: {}", attempts, status);
 
-            attempts++;
+            if (FAILURE_STATUSES.contains(status.toUpperCase())) {
+                watch.stop();
+                log.error("Polling: Run {} terminou com status {} após {} tentativas", runId, status, attempts);
+                throw new PollingFailedException(
+                        "A run do Apify terminou com status " + status + ".", 502, watch.getTotalTimeSeconds(), attempts);
+            }
 
-            // Não há tratamento de erro no tempo total do polling, caso ocorra de exceder o rate limit existe
-            // uma exception própria pra isso
+            if (attempts >= MAX_ATTEMPTS) {
+                watch.stop();
+                log.error("Polling: Run {} excedeu o limite de {} tentativas", runId, MAX_ATTEMPTS);
+                throw new PollingFailedException(
+                        "Tempo limite de polling excedido para a run do Apify.", 504, watch.getTotalTimeSeconds(), attempts);
+            }
+
+            attempts++;
 
         } while(!status.equalsIgnoreCase("SUCCEEDED"));
 
         watch.stop();
         log.info("Polling: Polling concluído em {}s", watch.getTotalTimeSeconds());
-        return true;
     }
 
 

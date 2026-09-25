@@ -8,7 +8,6 @@ import com.lucas.scraper.dto.out.IgCommentsDeltaOut;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
-import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.IgCommentsGateway;
 import com.lucas.scraper.gateway.IgPostGateway;
 import com.lucas.scraper.gateway.IgProfileGateway;
@@ -37,10 +36,7 @@ public class InstagramService {
 
     public List<IgCommentsOut> getInstagramComments(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("instagram")) {
-            log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "Instagram");
 
         log.info("Instagram Service: Iniciando coleta em: {}", postUrl);
 
@@ -61,14 +57,9 @@ public class InstagramService {
 
     public IgCommentsDeltaOut getDeltaInstagramComments(IgFisherDeltaCommentsIn data){
 
-        if (!data.postUrl().toLowerCase().contains("instagram")) {
-            log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-        }
+        ValidationsUtils.validatePlatformUrl(data.postUrl(), "Instagram");
 
-        // TODO: Trazer a instanciação do input para client Feign para cá
-
-        log.info("Instagram Profile Service: Iniciando coleta parcial para comentários de ID's {}", data.lastCommentsIds().toString());
+        log.info("Instagram Service: Iniciando coleta parcial para comentários de ID's {}", data.lastCommentsIds().toString());
 
         IgCommentsDeltaOut response = commentsGateway.getDeltaInstagramComments(data);
 
@@ -81,6 +72,8 @@ public class InstagramService {
 
 
     public IgProfileOut getInstagramProfile(String username){
+
+        ValidationsUtils.requireNonBlank(username, "username");
 
         log.info("Instagram Profile Service: Iniciando coleta do perfil: {}", username);
 
@@ -100,10 +93,7 @@ public class InstagramService {
 
     public IgPostOut getInstagramPost(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("instagram")) {
-            log.warn("Instagram Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "Instagram");
 
         log.info("Instagram Service: Iniciando coleta do post: {}", postUrl);
 
@@ -121,32 +111,4 @@ public class InstagramService {
         log.info("Instagram Service: Foram coletados {} posts para: {}", response.size(), postUrl);
         return response.getFirst();
     }
-
-
-    // TODO: Verificar possibilidade de deixar filtros de comentários para a outra parte da aplicação
-//    public List<IgCommentsOut> getInstagramFilteredComments(FisherIn input, String keyword){
-//
-//        if (!input.instagramUrl().contains("instagram")) {
-//            log.warn("Comment Service: Requisição ignorada devido invalidade de URL");
-//            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-//        }
-//
-//        log.info("Comment Service: Iniciando coleta em: {}", input.instagramUrl());
-//
-//        List<IgCommentsOut> raw = getInstagramComments(new IgCommentsIn(
-//                List.of(input.instagramUrl()),
-//                false,
-//                false,
-//                1000));
-//
-//         List<IgCommentsOut> response = raw
-//                .stream()
-//                .filter(item -> item.text()
-//                        .toLowerCase()
-//                        .contains(keyword.toLowerCase()))
-//                .toList();
-//
-//         log.info("Instagram Comment Service: Foram filtradas {} itens com a keywords \"{}\" no Instagram", response.size(), keyword);
-//         return response;
-//    }
 }

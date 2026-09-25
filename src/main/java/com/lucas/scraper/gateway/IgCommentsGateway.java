@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.in.apify.IgCommentsIn;
 import com.lucas.scraper.dto.out.IgCommentsDeltaOut;
 import com.lucas.scraper.dto.out.IgCommentsOut;
 import com.lucas.scraper.dto.out.RunOut;
+import com.lucas.scraper.exception.PollingFailedException;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
 import lombok.SneakyThrows;
@@ -42,8 +43,7 @@ public class IgCommentsGateway {
         RunOut run = apifyClient.startRun(actorId, data, "Bearer " + token);
         log.info("Instagram Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
 
-        if (!polling.waitForSucceeded(run.data().runId()))
-            log.error("Instagram Gateway: Polling falhou para requisição de id {}.", run.data().runId());
+        polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
         log.info("Instagram Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
@@ -100,7 +100,6 @@ public class IgCommentsGateway {
         log.info("Instagram Gateway: Iniciando a Run de id {} para scraping PARCIAL de comentários", run.data().runId());
 
         List<Map<String, Object>> rawComments = null;
-        String runStatus;
         int parseAttempts = 1;
 
         do {
@@ -118,13 +117,19 @@ public class IgCommentsGateway {
             if (deltaFound)
                 break;
 
+            if (parseAttempts >= ApifyPolling.MAX_ATTEMPTS) {
+                apifyClient.abortRun(runId, "Bearer " + token);
+                log.error("Instagram Gateway: Run {} excedeu o limite de {} tentativas na busca parcial", runId, ApifyPolling.MAX_ATTEMPTS);
+                throw new PollingFailedException(
+                        "Tempo limite de polling excedido para a run parcial do Apify.", 504, parseAttempts * 4.0, parseAttempts);
+            }
+
             parseAttempts++;
 
             Thread.sleep(4000);
-            runStatus = apifyClient.getRunDetails(runId, "Bearer " + token).data().status();
 
-        // Quando a run for concluída ("SUCEEDDED") ou abortada ("ABORTED"), o loop termina
-        } while (runStatus.equalsIgnoreCase("RUNNING"));
+        // Quando a run for concluída ("SUCCEEDED"), falhar ou for abortada, o loop termina
+        } while (polling.isStatusRunning(runId));
 
 
         List<IgCommentsOut> mappedComments = rawComments.stream().map(raw -> {

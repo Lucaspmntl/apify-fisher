@@ -3,8 +3,10 @@ package com.lucas.scraper.handler;
 import com.lucas.scraper.dto.out.exception.BeansValidationOut;
 import com.lucas.scraper.dto.out.exception.FieldExceptionOut;
 import com.lucas.scraper.dto.out.exception.GenericMessageOut;
+import com.lucas.scraper.dto.out.exception.PollingFailedOut;
 import com.lucas.scraper.exception.InvalidResponseDataException;
 import com.lucas.scraper.exception.InvalidURLException;
+import com.lucas.scraper.exception.PollingFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -49,5 +51,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidResponseDataException.class)
     private ResponseEntity<GenericMessageOut> InvalidResponseDataExceptionHandler(InvalidResponseDataException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getDetails());
+    }
+
+    @ExceptionHandler(PollingFailedException.class)
+    private ResponseEntity<PollingFailedOut> PollingFailedExceptionHandler(PollingFailedException exception) {
+        return ResponseEntity.status(exception.getDetails().statusCode()).body(exception.getDetails());
     }
 }

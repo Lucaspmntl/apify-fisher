@@ -6,7 +6,6 @@ import com.lucas.scraper.dto.in.apify.TtProfileIn;
 import com.lucas.scraper.dto.out.TtCommentsOut;
 import com.lucas.scraper.dto.out.TtPostOut;
 import com.lucas.scraper.dto.out.TtProfileOut;
-import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.TtCommentsGateway;
 import com.lucas.scraper.gateway.TtPostGateway;
 import com.lucas.scraper.gateway.TtProfileGateway;
@@ -32,10 +31,7 @@ public class TiktokService {
 
     public List<TtCommentsOut> getTiktokComments(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("tiktok")) {
-            log.warn("Tiktok Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "TikTok");
 
         log.info("TikTok Service: Iniciando coleta em: {}", postUrl);
 
@@ -49,17 +45,14 @@ public class TiktokService {
 
         ValidationsUtils.parseDataVality(response);
 
-        log.info("Instagram Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
+        log.info("TikTok Service: Foram coletados {} comentários em: {}", response.size(), postUrl);
         return response;
     }
 
 
     public TtPostOut getTiktokPost(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("tiktok")) {
-            log.warn("Tiktok Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do TikTok.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "TikTok");
 
         log.info("TikTok Service: Iniciando coleta de post em: {}", postUrl);
 
@@ -81,6 +74,8 @@ public class TiktokService {
 
 
     public TtProfileOut getTikTokProfile(String profileId){
+
+        ValidationsUtils.requireNonBlank(profileId, "profileId");
 
         log.info("TikTok Service: Iniciando coleta do perfil: {}", profileId);
 

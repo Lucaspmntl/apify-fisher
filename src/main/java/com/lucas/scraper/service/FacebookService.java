@@ -7,12 +7,10 @@ import com.lucas.scraper.dto.out.FbCommentsOut;
 import com.lucas.scraper.dto.out.FbPostOut;
 import com.lucas.scraper.dto.out.FbProfileOut;
 import com.lucas.scraper.exception.InvalidResponseDataException;
-import com.lucas.scraper.exception.InvalidURLException;
 import com.lucas.scraper.gateway.FbCommentsGateway;
 import com.lucas.scraper.gateway.FbPostGateway;
 import com.lucas.scraper.gateway.FbProfileGateway;
 import com.lucas.scraper.utils.ValidationsUtils;
-import com.lucas.scraper.utils.ValidatablePayload;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,10 +35,7 @@ public class FacebookService {
 
     public List<FbCommentsOut> getFacebookComments(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("facebook")) {
-            log.warn("Facebook Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Instagram.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "Facebook");
 
         log.info("Facebook Service: Iniciando coleta em: {}", postUrl);
 
@@ -60,10 +55,7 @@ public class FacebookService {
 
     public FbPostOut getFacebookPost(String postUrl){
 
-        if (!postUrl.toLowerCase().contains("facebook")) {
-            log.warn("Facebook Service: Requisição ignorada devido invalidade de URL");
-            throw new InvalidURLException("A URL deve conter o endereço de algum objeto do Facebook.");
-        }
+        ValidationsUtils.validatePlatformUrl(postUrl, "Facebook");
 
         log.info("Facebook Service: Iniciando coleta do post: {}", postUrl);
 
@@ -84,6 +76,8 @@ public class FacebookService {
 
     @SneakyThrows
     public FbProfileOut getFacebookProfile(String profileId){
+
+        ValidationsUtils.requireNonBlank(profileId, "profileId");
 
         String profileUrl = "https://www.facebook.com/" + profileId;
 
@@ -121,15 +115,5 @@ public class FacebookService {
 
         log.info("Facebook Service: Foram coletados {} perfis para: {}", response.size(), profileUrl);
         return response.getFirst();
-    }
-
-    // Engloba no parametro todos os records de DTO's que implementam ResponseDataValidator
-    private void hasValidData(List<? extends ValidatablePayload> response){
-        boolean isValid = response != null && !response.isEmpty() && !response.getFirst().isBlankPayload();
-
-        if(!isValid){
-            log.error("Facebook Service: Dados vazios ou nulos. Ocorreu um erro externo impedindo a coleta dos dados do post.");
-            throw new InvalidResponseDataException("Não foi possível coletar os dados do post por serem inválidos ou nulos.");
-        }
     }
 }

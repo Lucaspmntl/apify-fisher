@@ -36,8 +36,7 @@ public class FbProfileGateway {
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Facebook Profile Gateway: Iniciando a Run de id {} para scraping de perfil", run.data().runId());
 
-        if (!polling.waitForSucceeded(run.data().runId()))
-            log.error("Facebook Profile Gateway: Polling falhou para requisição de id {}.", run.data().runId());
+        polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawProfiles = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
         log.info("Facebook Profile Gateway: Run de id {} retornou {} itens", run.data().runId(), rawProfiles.size());

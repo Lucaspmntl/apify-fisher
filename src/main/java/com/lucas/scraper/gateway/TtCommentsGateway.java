@@ -36,8 +36,7 @@ public class TtCommentsGateway {
         RunOut run = apifyClient.startRun(actorId, input, "Bearer " + token);
         log.info("Tiktok Gateway: Iniciando a Run de id {} para scraping de comentários", run.data().runId());
 
-        if(!polling.waitForSucceeded(run.data().runId()))
-            log.error("Tiktok Gateway: Polling falhou para requisição de id {}.", run.data().runId());
+        polling.waitForSucceeded(run.data().runId());
 
         List<Map<String, Object>> rawComments = apifyClient.getDatasetItems(run.data().runId(), "Bearer " + token);
         log.info("Tiktok Gateway: Run de id {} retornou {} itens", run.data().runId(), rawComments.size());
