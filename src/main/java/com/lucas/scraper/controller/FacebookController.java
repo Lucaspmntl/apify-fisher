@@ -5,6 +5,8 @@ import com.lucas.scraper.dto.out.FbPostOut;
 import com.lucas.scraper.dto.out.FbProfileOut;
 
 import com.lucas.scraper.service.FacebookService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Facebook")
 @RestController
 @RequestMapping("/fisher/api/v1/facebook")
 public class FacebookController {
@@ -59,7 +62,9 @@ public class FacebookController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<FbProfileOut> getFacebookProfile(@RequestParam String profile){
+    public ResponseEntity<FbProfileOut> getFacebookProfile(
+            @Parameter(description = "Id/slug do perfil (não a URL completa) — usado para montar https://www.facebook.com/{profile}")
+            @RequestParam String profile){
 
         StopWatch watch = new StopWatch();
         watch.start();

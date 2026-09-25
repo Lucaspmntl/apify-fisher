@@ -7,6 +7,8 @@ import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.service.InstagramService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Instagram")
 @RestController
 @RequestMapping("/fisher/api/v1/instagram")
 public class InstagramController {
@@ -43,6 +46,10 @@ public class InstagramController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Raspagem parcial de comentários (delta)",
+            description = "Restrito ao Instagram por ser a plataforma com maior volume de comentários — não existe " +
+                    "equivalente para Facebook/TikTok. Faz polling do dataset enquanto a run ainda está em andamento " +
+                    "e aborta a run assim que encontra um id de lastCommentsIds, retornando só os comentários novos.")
     @PostMapping("/comment/delta")
     public ResponseEntity<IgCommentsDeltaOut> getInstagramDeltaComments(@Valid @RequestBody IgFisherDeltaCommentsIn data){
 

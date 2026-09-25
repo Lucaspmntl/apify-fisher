@@ -4,6 +4,7 @@ import com.lucas.scraper.dto.out.TtCommentsOut;
 import com.lucas.scraper.dto.out.TtPostOut;
 import com.lucas.scraper.dto.out.TtProfileOut;
 import com.lucas.scraper.service.TikTokService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "TikTok")
 @RestController
 @RequestMapping("/fisher/api/v1/tiktok")
 public class TikTokController {
