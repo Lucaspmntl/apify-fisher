@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.TtProfileOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,18 +45,18 @@ public class TtProfileGateway {
         return rawProfiles.stream().map(raw -> {
 
             // Extração do campo authorMeta
-            Map<String, Object> authorMeta = (Map<String, Object>) raw.get("authorMeta");
+            Map<String, Object> authorMeta = RawItemMapper.getMap(raw, "authorMeta");
 
             if (authorMeta == null)
                 return null;
 
-            String id = (String) authorMeta.get("id");
-            String username = (String) authorMeta.get("name");
-            String fullName = (String) authorMeta.get("nickName");
-            String biography = (String) authorMeta.get("signature");
-            String profilePicUrl = (String) authorMeta.get("avatar");
-            String profileUrl = (String) authorMeta.get("profileUrl");
-            Boolean isPrivate = (Boolean) authorMeta.get("privateAccount");
+            String id = RawItemMapper.getString(authorMeta, "id");
+            String username = RawItemMapper.getString(authorMeta, "name");
+            String fullName = RawItemMapper.getString(authorMeta, "nickName");
+            String biography = RawItemMapper.getString(authorMeta, "signature");
+            String profilePicUrl = RawItemMapper.getString(authorMeta, "avatar");
+            String profileUrl = RawItemMapper.getString(authorMeta, "profileUrl");
+            Boolean isPrivate = RawItemMapper.getBoolean(authorMeta, "privateAccount");
 
                 return new TtProfileOut(
                         id,

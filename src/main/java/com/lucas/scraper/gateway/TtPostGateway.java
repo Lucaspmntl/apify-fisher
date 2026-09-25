@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.TtPostOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,30 +47,30 @@ public class TtPostGateway {
         return rawPosts.stream().map(raw -> {
 
             // Dados não aninhados
-            String id = (String) raw.get("id");
-            String description = (String) raw.get("text");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("createTimeISO"));
-            Integer commentsCount = (Integer) raw.get("commentCount");
-            Integer likesCount = (Integer) raw.get("diggCount");
-            String postUrl = (String) raw.get("webVideoUrl");
+            String id = RawItemMapper.getString(raw, "id");
+            String description = RawItemMapper.getString(raw, "text");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "createTimeISO");
+            Integer commentsCount = RawItemMapper.getInteger(raw, "commentCount");
+            Integer likesCount = RawItemMapper.getInteger(raw, "diggCount");
+            String postUrl = RawItemMapper.getString(raw, "webVideoUrl");
 
             // Extração de ownerId em authorMeta.id
-            Map<String, Object> authorMeta = (Map<String, Object>) raw.get("authorMeta");
+            Map<String, Object> authorMeta = RawItemMapper.getMap(raw, "authorMeta");
 
             String ownerId = null;
             String ownerUsername = null;
             String ownerFullName = null;
             if (authorMeta != null) {
-                ownerId = (String) authorMeta.get("id");
-                ownerUsername = (String) authorMeta.get("nickName");
-                ownerFullName = (String) authorMeta.get("name");
+                ownerId = RawItemMapper.getString(authorMeta, "id");
+                ownerUsername = RawItemMapper.getString(authorMeta, "nickName");
+                ownerFullName = RawItemMapper.getString(authorMeta, "name");
             }
 
             // Extração de imageUrl em videoMeta.coverUrl
             String imageUrl = null;
-            Map<String, Object> videoMeta = (Map<String, Object>) raw.get("videoMeta");
+            Map<String, Object> videoMeta = RawItemMapper.getMap(raw, "videoMeta");
             if (videoMeta != null) {
-                imageUrl = (String) videoMeta.get("coverUrl");
+                imageUrl = RawItemMapper.getString(videoMeta, "coverUrl");
             }
 
             return new TtPostOut(

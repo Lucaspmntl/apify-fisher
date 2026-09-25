@@ -8,6 +8,7 @@ import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.exception.PollingFailedException;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -52,20 +53,20 @@ public class IgCommentsGateway {
         return rawComments.stream().map(raw -> {
 
             // Dados não aninhados
-            String id = (String) raw.get("id");
-            String text = (String) raw.get("text");
-            String ownerPicUrl = (String) raw.get("ownerProfilePicUrl");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("timestamp"));
+            String id = RawItemMapper.getString(raw, "id");
+            String text = RawItemMapper.getString(raw, "text");
+            String ownerPicUrl = RawItemMapper.getString(raw, "ownerProfilePicUrl");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "timestamp");
 
             // Campo aninhado da response original
-            Map<String, Object> owner = (Map<String, Object>) raw.get("owner");
+            Map<String, Object> owner = RawItemMapper.getMap(raw, "owner");
 
             // Extração de campos dentro de owner
             String ownerId = null;
             String ownerUsername = null;
             if (owner != null){
-                ownerId = (String) owner.get("id");
-                ownerUsername = (String) owner.get("full_name");
+                ownerId = RawItemMapper.getString(owner, "id");
+                ownerUsername = RawItemMapper.getString(owner, "full_name");
             }
 
             return new IgCommentsOut(
@@ -135,20 +136,20 @@ public class IgCommentsGateway {
         List<IgCommentsOut> mappedComments = rawComments.stream().map(raw -> {
 
             // Dados não aninhados
-            String id = (String) raw.get("id");
-            String text = (String) raw.get("text");
-            String ownerPicUrl = (String) raw.get("ownerProfilePicUrl");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("timestamp"));
+            String id = RawItemMapper.getString(raw, "id");
+            String text = RawItemMapper.getString(raw, "text");
+            String ownerPicUrl = RawItemMapper.getString(raw, "ownerProfilePicUrl");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "timestamp");
 
             // Campo aninhado da response original
-            Map<String, Object> owner = (Map<String, Object>) raw.get("owner");
+            Map<String, Object> owner = RawItemMapper.getMap(raw, "owner");
 
             // Extração de campos dentro de owner
             String ownerId = null;
             String ownerUsername = null;
             if (owner != null){
-                ownerId = (String) owner.get("id");
-                ownerUsername = (String) owner.get("full_name");
+                ownerId = RawItemMapper.getString(owner, "id");
+                ownerUsername = RawItemMapper.getString(owner, "full_name");
             }
 
             return new IgCommentsOut(

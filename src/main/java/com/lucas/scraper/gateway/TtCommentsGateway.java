@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.TtCommentsOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,12 +45,12 @@ public class TtCommentsGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto TtCommentsOut
         return rawComments.stream().map(raw -> {
 
-            String id = (String) raw.get("cid");
-            String text = (String) raw.get("text");
-            String ownerUsername = (String) raw.get("uniqueId");
-            String ownerPicUrl = (String) raw.get("avatarThumbnail");
-            String ownerId = (String) raw.get("uid");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("createTimeISO"));
+            String id = RawItemMapper.getString(raw, "cid");
+            String text = RawItemMapper.getString(raw, "text");
+            String ownerUsername = RawItemMapper.getString(raw, "uniqueId");
+            String ownerPicUrl = RawItemMapper.getString(raw, "avatarThumbnail");
+            String ownerId = RawItemMapper.getString(raw, "uid");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "createTimeISO");
 
             return new TtCommentsOut(
                 id,

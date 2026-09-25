@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.FbProfileOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,16 +47,16 @@ public class FbProfileGateway {
 
 
             // Extração de profile
-            Map<String, Object> profile = (Map<String, Object>) raw.get("profile");
+            Map<String, Object> profile = RawItemMapper.getMap(raw, "profile");
             if (profile == null) {
                 return null;
             }
 
-            String id = (String) profile.get("profile_id");
-            String username = (String) profile.get("name");
-            String biography = (String) profile.get("intro");
-            String profilePicUrl = (String) profile.get("image");
-            String profileUrl = (String) profile.get("url");
+            String id = RawItemMapper.getString(profile, "profile_id");
+            String username = RawItemMapper.getString(profile, "name");
+            String biography = RawItemMapper.getString(profile, "intro");
+            String profilePicUrl = RawItemMapper.getString(profile, "image");
+            String profileUrl = RawItemMapper.getString(profile, "url");
 
             return new FbProfileOut(
                 id,

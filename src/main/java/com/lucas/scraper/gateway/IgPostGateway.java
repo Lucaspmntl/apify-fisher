@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.IgPostOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,18 +45,18 @@ public class IgPostGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto IgPostOut
         return rawPosts.stream().map(raw ->{
 
-            String id = (String) raw.get("id");
-            String description = (String) raw.get("caption");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("timestamp"));
-            Integer commentsCount = (Integer) raw.get("commentsCount");
-            Integer likesCount = (Integer) raw.get("likesCount"); // RETORNARÁ -1 CASO LIKES SÓ SEJAM VISIVEIS PARA OWNER
-            String imageUrl = (String) raw.get("displayUrl");
-            String postUrl = (String) raw.get("url");
-            String videoUrl = (String) raw.get("videoUrl"); // RETORNA NULL CASO NÃO SEJA UM VíDEO
+            String id = RawItemMapper.getString(raw, "id");
+            String description = RawItemMapper.getString(raw, "caption");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "timestamp");
+            Integer commentsCount = RawItemMapper.getInteger(raw, "commentsCount");
+            Integer likesCount = RawItemMapper.getInteger(raw, "likesCount"); // RETORNARÁ -1 CASO LIKES SÓ SEJAM VISIVEIS PARA OWNER
+            String imageUrl = RawItemMapper.getString(raw, "displayUrl");
+            String postUrl = RawItemMapper.getString(raw, "url");
+            String videoUrl = RawItemMapper.getString(raw, "videoUrl"); // RETORNA NULL CASO NÃO SEJA UM VíDEO
 
-            String ownerFullName = (String) raw.get("ownerFullName");
-            String ownerUsername = (String) raw.get("ownerUsername");
-            String ownerId = (String) raw.get("ownerId");
+            String ownerFullName = RawItemMapper.getString(raw, "ownerFullName");
+            String ownerUsername = RawItemMapper.getString(raw, "ownerUsername");
+            String ownerId = RawItemMapper.getString(raw, "ownerId");
 
             return new IgPostOut(
                     id,

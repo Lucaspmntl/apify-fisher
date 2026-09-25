@@ -5,15 +5,13 @@ import com.lucas.scraper.dto.out.FbPostOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -49,45 +47,45 @@ public class FbPostGateway {
         return rawPosts.stream().map(raw -> {
 
             // Dados não aninhados
-            String id = (String) raw.get("id");
-            String description = (String) raw.get("previewDescription");
-            OffsetDateTime date = OffsetDateTime.ofInstant(Instant.ofEpochSecond((Integer) raw.get("publish_time")), ZoneId.systemDefault());
-            String postUrl = (String) raw.get("facebookUrl");
+            String id = RawItemMapper.getString(raw, "id");
+            String description = RawItemMapper.getString(raw, "previewDescription");
+            OffsetDateTime date = RawItemMapper.getEpochSecondsDate(raw, "publish_time");
+            String postUrl = RawItemMapper.getString(raw, "facebookUrl");
 
             // Extração de username dentro de URI da publicação (A API não disponibiliza o respectivo dado)
-            String ownerUsername = URI.create(postUrl).getPath().split("/")[1];
+            String ownerUsername = RawItemMapper.getFirstPathSegment(postUrl);
 
             // Extração de imageUrl em preferred_thumbnail.image.uri
             String imageUrl = null;
-            Map<String, Object> preferredThumbnail = (Map<String, Object>) raw.get("preferred_thumbnail");
+            Map<String, Object> preferredThumbnail = RawItemMapper.getMap(raw, "preferred_thumbnail");
             if (preferredThumbnail != null) {
-                Map<String, Object> image = (Map<String, Object>) preferredThumbnail.get("image");
+                Map<String, Object> image = RawItemMapper.getMap(preferredThumbnail, "image");
                 if (image != null) {
-                    imageUrl = (String) image.get("uri");
+                    imageUrl = RawItemMapper.getString(image, "uri");
                 }
             }
-            
+
             // Extração de ownerId em owner.id
             String ownerId = null;
-            Map<String, Object> owner = (Map<String, Object>) raw.get("owner");
+            Map<String, Object> owner = RawItemMapper.getMap(raw, "owner");
             if (owner != null) {
-                ownerId = (String) owner.get("id");
+                ownerId = RawItemMapper.getString(owner, "id");
             }
-            
+
             // Extração do reactionCount em reaction_count.count
             Integer reactionCount = null;
-            Map<String, Object> reactionCountObj = (Map<String, Object>) raw.get("reaction_count");
+            Map<String, Object> reactionCountObj = RawItemMapper.getMap(raw, "reaction_count");
             if (reactionCountObj != null) {
-                reactionCount = (Integer) reactionCountObj.get("count");
+                reactionCount = RawItemMapper.getInteger(reactionCountObj, "count");
             }
-            
+
             // Extract commentCount dentro de comment_rendering_instance.comments
             Integer commentCount = null;
-            Map<String, Object> commentRenderingInstance = (Map<String, Object>) raw.get("comment_rendering_instance");
+            Map<String, Object> commentRenderingInstance = RawItemMapper.getMap(raw, "comment_rendering_instance");
             if (commentRenderingInstance != null) {
-                Map<String, Object> comments = (Map<String, Object>) commentRenderingInstance.get("comments");
+                Map<String, Object> comments = RawItemMapper.getMap(commentRenderingInstance, "comments");
                 if (comments != null) {
-                    commentCount = (Integer) comments.get("total_count");
+                    commentCount = RawItemMapper.getInteger(comments, "total_count");
                 }
             }
             

@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.IgProfileOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,13 +44,13 @@ public class IgProfileGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto IgProfileOut
         return rawProfiles.stream().map(raw -> {
 
-            String id = (String) raw.get("id");
-            String username = (String) raw.get("username");
-            String fullName = (String) raw.get("fullName");
-            String biography = (String) raw.get("biography");
-            String profilePicUrl = (String) raw.get("profilePicUrlHD");
-            String profileUrl = (String) raw.get("url");
-            Boolean isPrivate = (Boolean) raw.get("private");
+            String id = RawItemMapper.getString(raw, "id");
+            String username = RawItemMapper.getString(raw, "username");
+            String fullName = RawItemMapper.getString(raw, "fullName");
+            String biography = RawItemMapper.getString(raw, "biography");
+            String profilePicUrl = RawItemMapper.getString(raw, "profilePicUrlHD");
+            String profileUrl = RawItemMapper.getString(raw, "url");
+            Boolean isPrivate = RawItemMapper.getBoolean(raw, "private");
 
             return new IgProfileOut(
                     id,

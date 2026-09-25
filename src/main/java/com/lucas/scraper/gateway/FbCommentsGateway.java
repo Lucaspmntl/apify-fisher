@@ -5,6 +5,7 @@ import com.lucas.scraper.dto.out.FbCommentsOut;
 import com.lucas.scraper.dto.out.RunOut;
 import com.lucas.scraper.utils.ApifyGenericFeign;
 import com.lucas.scraper.utils.ApifyPolling;
+import com.lucas.scraper.utils.RawItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,13 +45,13 @@ public class FbCommentsGateway {
         // Transforma os dados List<Map<String, Object>> em um objeto FbCommentsOut
         return rawComments.stream().map(raw -> {
 
-            String id = (String) raw.get("commentId");
-            String text = (String) raw.get("text");
-            OffsetDateTime date = OffsetDateTime.parse((String) raw.get("date"));
+            String id = RawItemMapper.getString(raw, "commentId");
+            String text = RawItemMapper.getString(raw, "text");
+            OffsetDateTime date = RawItemMapper.getIsoDate(raw, "date");
 
-            String ownerUsername = (String) raw.get("profileName");
-            String ownerId = (String) raw.get("profileId");
-            String ownerPicUrl = (String) raw.get("profilePicture");
+            String ownerUsername = RawItemMapper.getString(raw, "profileName");
+            String ownerId = RawItemMapper.getString(raw, "profileId");
+            String ownerPicUrl = RawItemMapper.getString(raw, "profilePicture");
 
 
             return new FbCommentsOut(
