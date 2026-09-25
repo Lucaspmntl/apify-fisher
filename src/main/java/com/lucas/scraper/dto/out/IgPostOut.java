@@ -27,11 +27,11 @@ public record IgPostOut(
     public IgPostOut {
 
         // Em casos de posts em que o like só pode ser visualizado pelo owner o valor retornado é -1
-        if(likesCount < 0)
+        if (likesCount != null && likesCount < 0)
             likesCount = null;
 
         // Em casos de posts em que o comentário só pode ser visualizado pelo owner o valor retornado é -1
-        if (commentsCount < 0)
+        if (commentsCount != null && commentsCount < 0)
             commentsCount = null;
 
         // Em casos de posts que não são vídeos

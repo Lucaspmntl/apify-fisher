@@ -64,8 +64,8 @@ public class IgPostGateway {
                     date,
                     commentsCount,
                     likesCount,
-                    imageUrl,
                     postUrl,
+                    imageUrl,
                     videoUrl,
 
                     ownerFullName,

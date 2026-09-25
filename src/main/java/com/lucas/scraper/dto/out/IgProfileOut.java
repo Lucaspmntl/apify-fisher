@@ -13,7 +13,7 @@ public record IgProfileOut(
         String biography,
         @JsonAlias("profilePicUrlHD") String profilePicUrl,
         @JsonAlias("url") String profileUrl,
-        @JsonAlias("private") boolean isPrivate
+        @JsonAlias("private") Boolean isPrivate
 
 )implements ValidatablePayload {
 

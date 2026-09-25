@@ -13,7 +13,7 @@ public record TtProfileOut(
         @JsonAlias("signature") String biography,
         @JsonAlias("avatar") String profilePicUrl,
         String profileUrl,
-        @JsonAlias("privateAccount") boolean isPrivate
+        @JsonAlias("privateAccount") Boolean isPrivate
 
 ) implements ValidatablePayload {
 
